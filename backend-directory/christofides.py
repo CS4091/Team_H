@@ -4,7 +4,10 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import json
 import os
-from typing import Dict, List, Tuple, Set
+import numpy as np
+import random
+import time
+from typing import Dict, List, Tuple, Set, Optional
 
 # Create outputs directory if it doesn't exist
 os.makedirs("data/outputs", exist_ok=True)
@@ -260,6 +263,223 @@ def calculate_tour_cost(G: nx.Graph, tour: List[int]) -> float:
     return total_cost
 
 
+def lin_kernighan_heuristic(G: nx.Graph, initial_tour: List[int], max_iterations: int = 100) -> Tuple[List[int], float]:
+    """
+    Apply a basic Lin-Kernighan heuristic to improve a TSP tour.
+    This is used as a subroutine in the Chained Lin-Kernighan algorithm.
+    
+    Args:
+        G: Input graph
+        initial_tour: Initial TSP tour
+        max_iterations: Maximum number of iterations to perform
+        
+    Returns:
+        Tuple containing (improved TSP tour, tour cost)
+    """
+    # Make a copy of the initial tour
+    best_tour = initial_tour.copy()
+    
+    # Remove the last vertex if it's the same as the first (to work with open paths)
+    if best_tour[0] == best_tour[-1] and len(best_tour) > 1:
+        best_tour = best_tour[:-1]
+    
+    # Initialize variables
+    current_tour = best_tour.copy()
+    best_cost = calculate_tour_cost(G, best_tour + [best_tour[0]])
+    current_cost = best_cost
+    num_nodes = len(current_tour)
+    
+    # Edge cache for faster lookups
+    edge_cache = {}
+    def get_edge_weight(u, v):
+        if (u, v) in edge_cache:
+            return edge_cache[(u, v)]
+        elif (v, u) in edge_cache:
+            return edge_cache[(v, u)]
+        
+        if G.has_edge(u, v):
+            weight = G[u][v]['weight']
+        else:
+            try:
+                weight = nx.shortest_path_length(G, u, v, weight='weight')
+            except nx.NetworkXNoPath:
+                weight = float('inf')
+        
+        edge_cache[(u, v)] = weight
+        return weight
+    
+    # Helper function to perform a 2-opt move
+    def two_opt_move(tour, i, j):
+        """Perform a 2-opt move: reverse the segment tour[i:j+1]"""
+        new_tour = tour.copy()
+        new_tour[i:j+1] = reversed(tour[i:j+1])
+        return new_tour
+    
+    # Main LK algorithm - focused on 2-opt moves for simplicity and speed
+    for iteration in range(max_iterations):
+        improved = False
+        
+        # Try all possible 2-opt moves
+        edges = list(range(num_nodes))
+        random.shuffle(edges)  # Randomize edge selection
+        
+        for i in edges:
+            if improved:
+                break
+                
+            i_next = (i + 1) % num_nodes
+            
+            for j in range(i + 2, num_nodes):
+                if j - i == num_nodes - 1:
+                    continue  # Skip moves that would break the cycle
+                
+                j_next = (j + 1) % num_nodes
+                
+                # Calculate the change in cost
+                current_edges_cost = (
+                    get_edge_weight(current_tour[i], current_tour[i_next]) + 
+                    get_edge_weight(current_tour[j], current_tour[j_next])
+                )
+                new_edges_cost = (
+                    get_edge_weight(current_tour[i], current_tour[j]) + 
+                    get_edge_weight(current_tour[i_next], current_tour[j_next])
+                )
+                
+                if new_edges_cost < current_edges_cost:
+                    # Perform the 2-opt move
+                    current_tour = two_opt_move(current_tour, i_next, j)
+                    current_cost -= (current_edges_cost - new_edges_cost)
+                    improved = True
+                    break
+        
+        # If no improvement was found, we're at a local optimum
+        if not improved:
+            break
+        
+        # Update best tour if current is better
+        if current_cost < best_cost:
+            best_tour = current_tour.copy()
+            best_cost = current_cost
+    
+    # Make sure the tour is a cycle (first node = last node)
+    if best_tour[0] != best_tour[-1]:
+        best_tour.append(best_tour[0])
+    
+    return best_tour, best_cost
+
+
+def double_bridge_kick(tour: List[int]) -> List[int]:
+    """
+    Perform a 4-opt move known as double-bridge move.
+    This is effective at escaping local optima and cannot be easily reversed
+    by 2-opt or 3-opt moves.
+    
+    Args:
+        tour: Current tour to perturb
+        
+    Returns:
+        A perturbed tour
+    """
+    n = len(tour)
+    if n < 8:  # Need at least 8 nodes for a meaningful double-bridge
+        return tour.copy()
+        
+    # Remove the last node if it's the same as the first
+    if tour[0] == tour[-1]:
+        tour = tour[:-1]
+        n -= 1
+    
+    # Pick 4 distinct points
+    points = sorted(random.sample(range(1, n), 4))
+    i1, i2, i3, i4 = points
+    
+    # Create a new tour by reconnecting segments in a different way
+    new_tour = (tour[:i1] + 
+               tour[i3:i4] + 
+               tour[i2:i3] + 
+               tour[i1:i2] + 
+               tour[i4:])
+    
+    return new_tour
+
+
+def chained_lin_kernighan(G: nx.Graph, initial_tour: List[int], num_chains: int = 10, max_non_improving: int = 5) -> Tuple[List[int], float]:
+    """
+    Implement the Chained Lin-Kernighan algorithm.
+    This repeatedly applies a kick perturbation followed by LK optimization.
+    
+    Args:
+        G: Input graph
+        initial_tour: Initial TSP tour (typically from Christofides)
+        num_chains: Maximum number of chains to perform
+        max_non_improving: Maximum number of non-improving chains before stopping
+        
+    Returns:
+        Tuple containing (best tour found, tour cost)
+    """
+    # Start with initial tour from Christofides
+    best_tour = initial_tour.copy()
+    # Remove last node if it's a cycle
+    if best_tour[0] == best_tour[-1] and len(best_tour) > 1:
+        best_tour = best_tour[:-1]
+        
+    best_cost = calculate_tour_cost(G, best_tour + [best_tour[0]])
+    
+    current_tour = best_tour.copy()
+    current_cost = best_cost
+    
+    print(f"Starting Chained LK with initial cost: {best_cost}")
+    
+    start_time = time.time()
+    max_time = 30  # Time limit in seconds
+    non_improving_chains = 0
+    
+    # Main chained LK loop
+    for chain in range(num_chains):
+        if time.time() - start_time > max_time:
+            print(f"Time limit reached after {chain} chains")
+            break
+            
+        if non_improving_chains >= max_non_improving:
+            print(f"Stopping after {non_improving_chains} non-improving chains")
+            break
+        
+        # Perturb the current solution using double-bridge kick
+        perturbed_tour = double_bridge_kick(current_tour)
+        
+        # Apply LK to the perturbed solution
+        optimized_tour, optimized_cost = lin_kernighan_heuristic(G, perturbed_tour)
+        
+        # If this chain found a better solution
+        if optimized_cost < best_cost:
+            improvement = best_cost - optimized_cost
+            best_tour = optimized_tour.copy()
+            best_cost = optimized_cost
+            current_tour = optimized_tour[:-1] if optimized_tour[0] == optimized_tour[-1] else optimized_tour.copy()
+            current_cost = best_cost
+            non_improving_chains = 0  # Reset counter
+            
+            print(f"Chain {chain}: Found better tour with cost {best_cost} (improved by {improvement:.2f})")
+        else:
+            # Accept the move anyway with some probability (similar to simulated annealing)
+            if optimized_cost < current_cost:
+                current_tour = optimized_tour[:-1] if optimized_tour[0] == optimized_tour[-1] else optimized_tour.copy()
+                current_cost = optimized_cost
+                print(f"Chain {chain}: Accepted non-best tour with cost {current_cost}")
+            
+            non_improving_chains += 1
+            print(f"Chain {chain}: No improvement to best tour (non-improving chains: {non_improving_chains})")
+    
+    # Ensure the tour is a cycle
+    if best_tour[0] != best_tour[-1]:
+        best_tour.append(best_tour[0])
+    
+    total_time = time.time() - start_time
+    print(f"Chained LK completed in {total_time:.2f} seconds")
+    print(f"Initial cost: {calculate_tour_cost(G, initial_tour)}, Final cost: {best_cost}")
+    return best_tour, best_cost
+
+
 def christofides_algorithm(G: nx.Graph) -> Tuple[List[int], float]:
     """
     Implement Christofides algorithm for TSP.
@@ -295,6 +515,27 @@ def christofides_algorithm(G: nx.Graph) -> Tuple[List[int], float]:
     tour_cost = calculate_tour_cost(G, tsp_tour)
     
     return tsp_tour, tour_cost
+
+
+def christofides_with_lk(G: nx.Graph) -> Tuple[List[int], float, List[int], float]:
+    """
+    Apply Christofides algorithm followed by Chained Lin-Kernighan heuristic.
+    
+    Args:
+        G: Input graph
+        
+    Returns:
+        Tuple containing (Christofides tour, Christofides cost, Chained LK tour, Chained LK cost)
+    """
+    # Get initial tour using Christofides
+    print("Running Christofides algorithm...")
+    christofides_tour, christofides_cost = christofides_algorithm(G)
+    
+    # Improve the tour using Chained Lin-Kernighan heuristic
+    print("\nRunning Chained Lin-Kernighan heuristic to improve tour...")
+    lk_tour, lk_cost = chained_lin_kernighan(G, christofides_tour)
+    
+    return christofides_tour, christofides_cost, lk_tour, lk_cost
 
 
 def visualize_tour(G: nx.Graph, tour: List[int], title: str):
@@ -388,26 +629,42 @@ def main():
     # Process sparse world
     print("Processing sparse_world.csv...")
     sparse_graph = read_graph_from_csv(sparse_file)
-    sparse_tour, sparse_cost = christofides_algorithm(sparse_graph)
-    print(f"Sparse World Tour: {sparse_tour}")
-    print(f"Sparse World Tour Cost: {sparse_cost}")
+    sparse_christofides_tour, sparse_christofides_cost, sparse_lk_tour, sparse_lk_cost = christofides_with_lk(sparse_graph)
+    
+    print(f"Sparse World Tour (Christofides): {sparse_christofides_tour}")
+    print(f"Sparse World Tour Cost (Christofides): {sparse_christofides_cost}")
+    print(f"Sparse World Tour (Christofides + Chained LK): {sparse_lk_tour}")
+    print(f"Sparse World Tour Cost (Christofides + Chained LK): {sparse_lk_cost}")
+    print(f"Improvement: {sparse_christofides_cost - sparse_lk_cost} ({100 * (sparse_christofides_cost - sparse_lk_cost) / sparse_christofides_cost:.2f}%)")
     
     # Save outputs for sparse world
-    visualize_tour(sparse_graph, sparse_tour, "Sparse World Tour")
-    save_tour_to_json(sparse_tour, sparse_cost, "sparse_world_tour")
-    save_tour_to_csv(sparse_tour, sparse_cost, "sparse_world_tour")
+    visualize_tour(sparse_graph, sparse_christofides_tour, "Sparse World Tour (Christofides)")
+    save_tour_to_json(sparse_christofides_tour, sparse_christofides_cost, "sparse_world_tour_christofides")
+    save_tour_to_csv(sparse_christofides_tour, sparse_christofides_cost, "sparse_world_tour_christofides")
+    
+    visualize_tour(sparse_graph, sparse_lk_tour, "Sparse World Tour (Christofides + Chained LK)")
+    save_tour_to_json(sparse_lk_tour, sparse_lk_cost, "sparse_world_tour_chained_lk")
+    save_tour_to_csv(sparse_lk_tour, sparse_lk_cost, "sparse_world_tour_chained_lk")
     
     # Process full world
     print("\nProcessing full_world.csv...")
     full_graph = read_graph_from_csv(full_file)
-    full_tour, full_cost = christofides_algorithm(full_graph)
-    print(f"Full World Tour: {full_tour}")
-    print(f"Full World Tour Cost: {full_cost}")
+    full_christofides_tour, full_christofides_cost, full_lk_tour, full_lk_cost = christofides_with_lk(full_graph)
+    
+    print(f"Full World Tour (Christofides): {full_christofides_tour}")
+    print(f"Full World Tour Cost (Christofides): {full_christofides_cost}")
+    print(f"Full World Tour (Christofides + Chained LK): {full_lk_tour}")
+    print(f"Full World Tour Cost (Christofides + Chained LK): {full_lk_cost}")
+    print(f"Improvement: {full_christofides_cost - full_lk_cost} ({100 * (full_christofides_cost - full_lk_cost) / full_christofides_cost:.2f}%)")
     
     # Save outputs for full world
-    visualize_tour(full_graph, full_tour, "Full World Tour")
-    save_tour_to_json(full_tour, full_cost, "full_world_tour")
-    save_tour_to_csv(full_tour, full_cost, "full_world_tour")
+    visualize_tour(full_graph, full_christofides_tour, "Full World Tour (Christofides)")
+    save_tour_to_json(full_christofides_tour, full_christofides_cost, "full_world_tour_christofides")
+    save_tour_to_csv(full_christofides_tour, full_christofides_cost, "full_world_tour_christofides")
+    
+    visualize_tour(full_graph, full_lk_tour, "Full World Tour (Christofides + Chained LK)")
+    save_tour_to_json(full_lk_tour, full_lk_cost, "full_world_tour_chained_lk")
+    save_tour_to_csv(full_lk_tour, full_lk_cost, "full_world_tour_chained_lk")
 
 
 if __name__ == "__main__":
