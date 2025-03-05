@@ -53,9 +53,8 @@ The Christofides algorithm follows these steps:
 │   │   ├── full_world.csv       # Complete graph with uniform edge weights
 │   │   ├── sparse_world.csv     # Sparse graph with varying edge weights
 │   │   └── *.png                # Visualizations of input graphs
-│   ├── outputs/                 # Algorithm output data
+│   ├── outputs/                 # Algorithm output data and visualizations of TSP tours
 │   └── plantuml-1.2025.1.jar    # PlantUML JAR for graph visualization
-├── *.png                        # Visualizations of TSP tours
 └── README.md                    # This file
 ```
 

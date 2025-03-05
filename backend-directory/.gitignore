@@ -1,4 +1,5 @@
-data/generatedfiles/*
+data/outputs/*
 *.puml
 *.csv
 *.png
+*.json
