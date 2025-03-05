@@ -1,1 +1,0 @@
-Install puml and graph viz, then run script

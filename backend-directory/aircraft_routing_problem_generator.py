@@ -129,8 +129,8 @@ def create_world_files(world_name: str, edges: typing.List[WorldEdge]):
     """
     Write out the data files describing the problem for consumption by student projects.
     """
-    puml_path = pathlib.Path(f'./generatedfiles/{world_name}.puml')
-    data_path = pathlib.Path(f'./generatedfiles/{world_name}.csv')
+    puml_path = pathlib.Path(f'./data/inputs/{world_name}.puml')
+    data_path = pathlib.Path(f'./data/inputs/{world_name}.csv')
     write_puml(output_filepath=puml_path, edges=edges)
     write_data_file(output_filepath=data_path, edges=edges)
 

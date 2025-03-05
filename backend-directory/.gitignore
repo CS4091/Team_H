@@ -1,0 +1,4 @@
+data/generatedfiles/*
+*.puml
+*.csv
+*.png
