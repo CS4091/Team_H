@@ -27,3 +27,17 @@ Navigate to the `frontend-directory` folder and follow the instructions in its R
 ## Project Structure
 - `/backend-directory` - Contains the core optimization algorithms and problem generators
 - `/frontend-directory` - Contains the web interface for interacting with the optimization engine
+
+## Repository Structure
+```
+Team_H/
+├── backend-directory/    # Python backend with optimization algorithms
+│   ├── ai_components/    # AI model components
+│   ├── ai_models/        # Trained AI models
+│   ├── data/             # Data files for problem instances
+│   └── christofides.py   # Implementation of Christofides algorithm
+├── frontend-directory/   # Next.js frontend application
+│   ├── public/           # Static assets
+│   └── src/              # Source code
+└── README.md             # This file
+```
