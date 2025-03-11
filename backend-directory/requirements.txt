@@ -18,7 +18,7 @@ pyparsing==2.4.6
 pytest==5.3.2
 python-dateutil==2.9.0.post0
 pytz==2025.1
-six==1.17.0
+six
 str2bool==1.1
 stringcase==1.2.0
 tzdata==2025.1
