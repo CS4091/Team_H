@@ -18,9 +18,11 @@ pyparsing==2.4.6
 pytest==5.3.2
 python-dateutil==2.9.0.post0
 pytz==2025.1
-six==1.17.0
+six
 str2bool==1.1
 stringcase==1.2.0
 tzdata==2025.1
 wcwidth==0.1.8
 zipp==0.6.0
+flask==2.0.1
+flask-cors==3.0.10
