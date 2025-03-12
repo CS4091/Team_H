@@ -1,22 +1,25 @@
-'use client';
+<!-- 'use client';
 
 import { useState } from 'react';
 import Image from 'next/image';
 import FileUpload from '../components/FileUpload';
 import ResultsDisplay from '../components/ResultsDisplay';
-import { TSPResult } from '../api/tspClient';
+import { TSPResult } from '../api/tspClient'; -->
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<'upload' | 'results'>('upload');
-  const [latestResult, setLatestResult] = useState<TSPResult | null>(null);
+//   const [activeTab, setActiveTab] = useState<'upload' | 'results'>('upload');
+//   const [latestResult, setLatestResult] = useState<TSPResult | null>(null);
 
-  const handleSolveComplete = (result: TSPResult) => {
-    setLatestResult(result);
-    setActiveTab('results');
-  };
+//   const handleSolveComplete = (result: TSPResult) => {
+//     setLatestResult(result);
+//     setActiveTab('results');
+//   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="text-6xl mt-[300px] text-center">
+      LANDING PAGE PLACEHOLDER
+    </div>
+<!--     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <header className="flex flex-col items-center mb-8">
@@ -79,6 +82,6 @@ export default function Home() {
           </div>
         </footer>
       </div>
-    </main>
+    </main> -->
   );
 }
