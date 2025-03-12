@@ -25,9 +25,6 @@ RUN mkdir -p data/inputs data/outputs
 # Set environment variable to non-interactive
 ENV PYTHONUNBUFFERED=1
 
-# Command to run the application
-#CMD ["bash", "routegen.sh"]
-
 EXPOSE 5000
 
 CMD ["python", "-m", "api.app"] 
