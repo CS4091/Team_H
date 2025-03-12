@@ -1,5 +1,10 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Figma Link:
+
+https://www.figma.com/design/OWtEJ2f1HwdguOPcTg2Whe/Capstone-2?node-id=0-1&t=rqFvb4YNTa4p8gFL-1
+Only Dr. Imran has view access to this link
+
 ## Getting Started
 
 First, run the development server:
