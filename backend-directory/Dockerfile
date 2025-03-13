@@ -27,4 +27,5 @@ ENV PYTHONUNBUFFERED=1
 
 EXPOSE 5000
 
-CMD ["python", "-m", "api.app"] 
+# Run using uvicorn instead of python directly
+CMD ["uvicorn", "api.app:app", "--host", "0.0.0.0", "--port", "5000"] 
