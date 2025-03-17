@@ -32,6 +32,7 @@ This implementation:
 - Matplotlib
 - NumPy
 - Pandas
+- FastAPI and Uvicorn (for API endpoints)
 - Java Runtime Environment (for PlantUML visualization)
 - Graphviz (optional, for PlantUML rendering)
 
@@ -61,6 +62,9 @@ This implementation:
 ├── aircraft_routing_problem_generator.py  # Generates test routing problems
 ├── routegen.sh                  # Shell script to generate route data and visualizations
 ├── requirements.txt             # Python dependencies
+├── api/                         # FastAPI application
+│   ├── app.py                   # Main API endpoints
+│   └── static.py                # Static file server for serving results
 ├── data/                        # Directory for input/output data
 │   ├── inputs/                  # Input graph data
 │   │   ├── full_world.csv       # Complete graph with uniform edge weights
@@ -72,6 +76,39 @@ This implementation:
 ```
 
 ## Usage
+
+### Running the API Server
+
+To start the FastAPI server:
+
+```
+uvicorn api.app:app --host 0.0.0.0 --port 5000 --reload
+```
+
+Or simply use Docker:
+
+```
+docker-compose up
+```
+
+### API Endpoints
+
+The following API endpoints are available:
+
+- **GET /api/health** - Health check endpoint
+- **POST /api/solve** - Upload a CSV file to solve the TSP problem
+- **GET /api/results** - Get a list of all solution results
+- **GET /api/results/{result_id}** - Get details for a specific result
+- **GET /api/examples** - Get a list of example problems
+- **GET /data/outputs/{filename}** - Get a specific output file (images, CSVs, etc.)
+- **GET /data/inputs/{filename}** - Get a specific input file
+
+### Interactive Documentation
+
+FastAPI provides automatic interactive API documentation:
+
+- **Swagger UI**: http://localhost:5000/docs
+- **ReDoc**: http://localhost:5000/redoc
 
 ### Generating Test Data
 
