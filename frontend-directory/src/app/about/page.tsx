@@ -4,31 +4,6 @@ import Image from "next/image"
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation Bar */}
-      <header className="border-b border-gray-200">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold">Pink Pony Club</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <nav className="flex items-center gap-4">
-              <a href="#" className="text-gray-700 hover:text-gray-900">
-                Route Generator
-              </a>
-              <a href="#" className="bg-gray-200 px-3 py-1 rounded-md text-gray-700 hover:text-gray-900">
-                About
-              </a>
-              <a href="#" className="text-gray-700 hover:text-gray-900">
-                Contact
-              </a>
-            </nav>
-            <div className="flex items-center gap-2">
-
-            </div>
-          </div>
-        </div>
-      </header>
-
       {/* Stats Section */}
       <section className="py-12">
         <div className="container mx-auto px-4">
