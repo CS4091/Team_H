@@ -25,3 +25,34 @@ body {
   font-size: 14px;
   scroll-behavior: smooth;
 }
+
+h1 {
+  @apply md:text-[61.04px] !important;
+}
+
+h2 {
+  @apply md:text-[48.83px] !important;
+}
+h3 {
+  @apply md:text-[39.06px] !important;
+}
+
+h4 {
+  @apply md:text-[31.25px] !important;
+}
+
+h5 {
+  @apply md:text-[25px] !important;
+}
+
+h6 {
+  @apply md:text-[20px] !important;
+}
+
+p {
+  @apply md:text-[16px] !important;
+}
+
+small {
+  @apply md:text-[12.8px] !important;
+}

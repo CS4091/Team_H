@@ -1,6 +1,3 @@
-// 'use client';
-
-// import { useState } from 'react';
 // import Image from 'next/image';
 // import FileUpload from '../components/FileUpload';
 // import ResultsDisplay from '../components/ResultsDisplay';
