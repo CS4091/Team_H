@@ -1,29 +1,32 @@
 'use client';
 
-import { useState, useRef } from 'react'
+import { useState, useRef } from 'react';
 import Button from './Button';
 
 interface CsvUploaderProps {
-    onFileSelect: (file: File, content: string) => void;
-};
+  onFileSelect: (file: File, content: string) => void;
+}
 
 export default function CsvUploader({ onFileSelect }: CsvUploaderProps) {
-    const [dragActive, setDragActive] = useState(false);
-    const inputRef = useRef<HTMLInputElement | null>(null);
-  
-    const handleFile = (file: File) => {
-      if (file.type !== 'text/csv') {
-        alert('Please upload a CSV file.');
-        return;
-      }
-  
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const text = event.target?.result as string;
-        onFileSelect(file, text); // Pass file + contents back to parent
-      };
-      reader.readAsText(file);
+  const [dragActive, setDragActive] = useState(false);
+  const [fileName, setFileName] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleFile = (file: File) => {
+    if (file.type !== 'text/csv') {
+      alert('Please upload a CSV file.');
+      return;
+    }
+
+    setFileName(file.name);
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      onFileSelect(file, text); // Pass file + contents back to parent
     };
+    reader.readAsText(file);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -67,11 +70,7 @@ export default function CsvUploader({ onFileSelect }: CsvUploaderProps) {
         <h6 className="text-center text-gray-600 mb-4">
           Drag & drop your CSV file here, or
         </h6>
-        <Button
-            text={'Upload CSV'}
-            onClick={triggerFileInput}
-            fillContainer={false}
-        />
+        <Button text={'Upload CSV'} onClick={triggerFileInput} fillContainer={false} />
         <input
           ref={inputRef}
           type="file"
@@ -79,6 +78,11 @@ export default function CsvUploader({ onFileSelect }: CsvUploaderProps) {
           onChange={handleChange}
           className="hidden"
         />
+        {fileName && (
+          <div className="mt-4 text-sm text-gray-700 font-medium">
+            Uploaded File: {fileName}
+          </div>
+        )}
       </div>
     </div>
   );
