@@ -1,14 +1,32 @@
 "use client";
 
-import { TextField, Button, Snackbar } from "@mui/material"
+import { useState } from 'react';
+import { TextField, Snackbar } from "@mui/material"
+import Button from "@/components/Button";
 import { useRouter } from "next/navigation";
-import { Bs0CircleFill } from "react-icons/bs";
+
+import supabase from '@/api/supabaseClient';
 
 export default function SignInPage() {
     const router = useRouter();
 
-    const handleLogin = () => {
-        router.push('/auth/dashboard');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const handleLogin = async () => {
+        setLoading(true);
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
+        setLoading(false);
+
+        if (error) {
+            alert('Invalid email or password.');
+        } else {
+            router.push('/auth/dashboard');
+        }
     };
 
     return (
@@ -17,15 +35,34 @@ export default function SignInPage() {
                 <h5 className="font-bold">Login to your account</h5>
                 <p>Enter your email and password to login</p>
             </div>
-            <div className="flex flex-col gap-2 w-[450px]">
-                <TextField/>
-                <TextField/>
-                <Button 
-                    variant="contained"
+            <div className="flex flex-col gap-[16px] w-[450px]">
+                <TextField
+                    label='Email'
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={loading}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            borderRadius: '8px',
+                        },
+                    }}
+                />
+                <TextField
+                    label='Password'
+                    type='password'
+                    onChange={(e) => setPassword(e.target.value)}
+                    disabled={loading}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            borderRadius: '8px',
+                        },
+                    }}
+                />
+                <Button
+                    text={loading ? 'Logging in...' : 'Login'}
                     onClick={handleLogin}
-                >
-                    Login
-                </Button>
+                    fillContainer={true}
+                    disabled={loading}
+                />
             </div>
         </div>
     );
