@@ -45,12 +45,14 @@ const Header: React.FC<HeaderProps> = ({ authenticated, displayActions }) => {
         {displayActions && (
           <div className="flex items-center space-x-6">
             <nav className="hidden md:flex items-center space-x-6">
+              {/*
               <Link
                 href="/route-generator"
                 className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300"
               >
                 Route Generator
               </Link>
+              */}
               <Link href="/about" className="hover:text-gray-500">
                 About
               </Link>
