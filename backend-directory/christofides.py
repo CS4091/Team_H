@@ -1,13 +1,14 @@
 import csv
-import math
+# import math
 import networkx as nx
 import matplotlib.pyplot as plt
 import json
 import os
-import numpy as np
+# import numpy as np
 import random
 import time
-from typing import Dict, List, Tuple, Set, Optional
+# from typing import Dict, List, Tuple, Set, Optional
+from typing import List, Tuple
 
 # Create outputs directory if it doesn't exist
 os.makedirs("data/outputs", exist_ok=True)
@@ -589,11 +590,10 @@ def save_tour_to_json(tour: List[int], cost: float, filename: str):
         "is_cycle": tour[0] == tour[-1] if tour else False
     }
     
-    output_path = f"data/outputs/{filename}.json"
-    with open(output_path, 'w') as f:
+    with open(filename, 'w') as f:
         json.dump(data, f, indent=2)
     
-    print(f"Tour data saved to {output_path}")
+    print(f"Tour data saved to {filename}")
 
 
 def save_tour_to_csv(tour: List[int], cost: float, filename: str):
@@ -605,9 +605,7 @@ def save_tour_to_csv(tour: List[int], cost: float, filename: str):
         cost: Total cost of the tour
         filename: Output filename
     """
-    output_path = f"data/outputs/{filename}.csv"
-    
-    with open(output_path, 'w', newline='') as f:
+    with open(filename, 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(["Step", "Node", "Next Node"])
         
@@ -618,7 +616,7 @@ def save_tour_to_csv(tour: List[int], cost: float, filename: str):
         writer.writerow(["", "", ""])
         writer.writerow(["Total Cost", cost, ""])
     
-    print(f"Tour steps saved to {output_path}")
+    print(f"Tour steps saved to {filename}")
 
 
 def main():
