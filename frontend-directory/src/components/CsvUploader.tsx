@@ -60,7 +60,7 @@ export default function CsvUploader({ onFileSelect }: CsvUploaderProps) {
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
         onDrop={handleDrop}
-        className={`border-2 border-dashed rounded-2xl p-8 transition-colors duration-200 ${
+        className={`flex flex-col justify-center items-center border-2 border-dashed rounded-2xl p-8 transition-colors duration-200 ${
           dragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
         }`}
       >
