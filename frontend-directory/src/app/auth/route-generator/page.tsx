@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import CsvUploader from '@/components/CsvUploader';
 import Button from '@/components/Button';
-import { tspClient } from '@/api/tspClient';
+import { generateRouteFromCsv } from '@/api/generateRouteFromCsv';
 
 export default function RouteGeneratorPage() {
     const [file, setFile] = useState<File | null>(null);
@@ -14,10 +14,7 @@ export default function RouteGeneratorPage() {
         const uploadProblem = async () => {
             try {
                 setLoading(true);
-                const result = await tspClient.uploadProblem(file);
-                // handel result her not sure the format of the response
-                // FUTURE UPDATE: will need to take user to dynamic routed page for this generated route
-                // also update user data in database
+                const result = await generateRouteFromCsv({ file });
                 alert('Solved the TSP!');
             } catch (err) {
                 alert('Failed to solve the TSP. Please try again.');
