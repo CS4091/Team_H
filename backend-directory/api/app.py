@@ -1,8 +1,11 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from typing import List, Dict, Any, Optional
 import os
 import json
 import sys
+from datetime import datetime
 
 # Add the parent directory to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -18,28 +21,41 @@ from christofides import (
     visualize_tour
 )
 
-app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+# Import the static file server
+from .static import static_app
 
-@app.route('/api/health', methods=['GET'])
+app = FastAPI(title="Aircraft Routing API", description="API for solving aircraft routing problems")
+
+# Enable CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # You might want to restrict this in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Mount the static file server
+app.mount("/data", static_app)
+
+@app.get("/api/health")
 def health_check():
     """
     Simple health check endpoint
     """
-    return jsonify({"status": "healthy"})
+    return {"status": "healthy"}
 
-@app.route('/api/solve', methods=['POST'])
-def solve_tsp():
+@app.post("/api/solve")
+async def solve_tsp(file: UploadFile = File(...)):
     """
     Submit a TSP problem for solving.
-    Input: CSV content as string or file upload
-    Output: Solution details including tour and cost
     """
-    if 'file' in request.files:
-        file = request.files['file']
+    try:
         # Save temporarily
         temp_path = "data/inputs/temp_input.csv"
-        file.save(temp_path)
+        with open(temp_path, "wb") as temp_file:
+            content = await file.read()
+            temp_file.write(content)
         
         # Process the file
         G = read_graph_from_csv(temp_path)
@@ -59,23 +75,26 @@ def solve_tsp():
         save_tour_to_csv(tour, cost, csv_path)
         visualize_tour(G, tour, "API TSP Solution", img_path)
         
-        return jsonify({
+        return {
             "tour": tour,
             "cost": cost,
             "visualization_path": "/data/outputs/api_result.png",
             "json_path": "/data/outputs/api_result.json",
             "csv_path": "/data/outputs/api_result.csv"
-        })
-    
-    return jsonify({"error": "No file provided"}), 400
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error processing file: {str(e)}")
 
-@app.route('/api/results', methods=['GET'])
+@app.get("/api/results")
 def get_results():
     """
     Get a list of available results
     """
     results = []
     outputs_dir = "data/outputs"
+    
+    if not os.path.exists(outputs_dir):
+        return []
     
     for filename in os.listdir(outputs_dir):
         if filename.endswith(".json"):
@@ -92,10 +111,10 @@ def get_results():
             except:
                 continue
     
-    return jsonify(results)
+    return results
 
-@app.route('/api/results/<result_id>', methods=['GET'])
-def get_result_details(result_id):
+@app.get("/api/results/{result_id}")
+def get_result_details(result_id: str):
     """
     Get details for a specific result
     """
@@ -107,17 +126,20 @@ def get_result_details(result_id):
             # Add paths to related files
             data["visualization_path"] = f"/data/outputs/{result_id}.png"
             data["csv_path"] = f"/data/outputs/{result_id}.csv"
-            return jsonify(data)
+            return data
     
-    return jsonify({"error": "Result not found"}), 404
+    raise HTTPException(status_code=404, detail="Result not found")
 
-@app.route('/api/examples', methods=['GET'])
+@app.get("/api/examples")
 def get_examples():
     """
     Get a list of example problems
     """
     examples = []
     inputs_dir = "data/inputs"
+    
+    if not os.path.exists(inputs_dir):
+        return []
     
     for filename in os.listdir(inputs_dir):
         if filename.endswith(".csv"):
@@ -129,7 +151,8 @@ def get_examples():
                 "created": os.path.getctime(file_path)
             })
     
-    return jsonify(examples)
+    return examples
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True) 
+    import uvicorn
+    uvicorn.run("app:app", host="0.0.0.0", port=5000, reload=True) 
