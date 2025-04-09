@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react'
+import Button from './Button';
 
 interface CsvUploaderProps {
     onFileSelect: (file: File, content: string) => void;
@@ -66,12 +67,11 @@ export default function CsvUploader({ onFileSelect }: CsvUploaderProps) {
         <h6 className="text-center text-gray-600 mb-4">
           Drag & drop your CSV file here, or
         </h6>
-        <button
-          onClick={triggerFileInput}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-        >
-          Upload CSV
-        </button>
+        <Button
+            text={'Upload CSV'}
+            onClick={triggerFileInput}
+            fillContainer={false}
+        />
         <input
           ref={inputRef}
           type="file"
