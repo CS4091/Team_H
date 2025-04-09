@@ -29,7 +29,7 @@ export default function RouteGeneratorPage() {
     return (
         <div className='flex h-screen justify-center items-center'>
             <div className='flex flex-col justify-center items-center w-[400px] gap-[50px]'>
-                <CsvUpgloader onFileSelect={(csv: File) => {setFile(csv)}}/>
+                <CsvUploader onFileSelect={(csv: File) => {setFile(csv)}}/>
                 <Button 
                     text='Calculate Route'
                     onClick={handleSubmit}
