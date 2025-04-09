@@ -34,9 +34,12 @@ const Header: React.FC<HeaderProps> = ({ authenticated, displayActions }) => {
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <div className="text-3xl font-bold">PP</div>
-          <span className="text-2xl font-semibold globals-text-shadow select-none">
+          <Link
+            href="/"
+            className="text-2xl font-semibold globals-text-shadow select-none cursor-pointer hover:text-gray-500 active:text-gray-700"
+          >
             Pink Pony Club
-          </span>
+          </Link>
         </div>
 
         {displayActions && (

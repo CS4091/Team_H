@@ -1,11 +1,12 @@
+import base64
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from typing import List, Dict, Any, Optional
+# from fastapi.responses import JSONResponse
+# from typing import List, Dict, Any, Optional
 import os
 import json
 import sys
-from datetime import datetime
+# from datetime import datetime
 
 # Add the parent directory to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -53,9 +54,13 @@ async def solve_tsp(file: UploadFile = File(...)):
     try:
         # Save temporarily
         temp_path = "data/inputs/temp_input.csv"
+        os.makedirs(os.path.dirname(temp_path), exist_ok=True)
         with open(temp_path, "wb") as temp_file:
-            content = await file.read()
-            temp_file.write(content)
+          try:
+              content = await file.read()
+              temp_file.write(content)
+          except Exception as e:
+              raise HTTPException(status_code=400, detail=f"Error reading file: {str(e)}")
         
         # Process the file
         G = read_graph_from_csv(temp_path)
@@ -63,7 +68,7 @@ async def solve_tsp(file: UploadFile = File(...)):
         
         # Run the algorithm
         tour = christofides_algorithm(G)
-        cost = calculate_tour_cost(G, tour)
+        cost = calculate_tour_cost(G, tour[0])
         
         # Save results
         output_prefix = "data/outputs/api_result"
@@ -71,16 +76,25 @@ async def solve_tsp(file: UploadFile = File(...)):
         csv_path = f"{output_prefix}.csv"
         img_path = f"{output_prefix}.png"
         
-        save_tour_to_json(tour, cost, json_path)
-        save_tour_to_csv(tour, cost, csv_path)
-        visualize_tour(G, tour, "API TSP Solution", img_path)
+        save_tour_to_json(tour[0], cost, json_path)
+        print("after save tour to json")
+        save_tour_to_csv(tour[0], cost, csv_path)
+        visualize_tour(G, tour[0], "API TSP Solution")
+        
+        json_path = "data/outputs/api_result.json"
+        with open(json_path, 'r') as f:
+            json_data = json.load(f)
+
+        pngFilename = "data/outputs/API_TSP_Solution.png"
+        with open(pngFilename, "rb") as f:
+            data = f.read()
+        encoded_image = base64.b64encode(data).decode("utf-8")
+        
+        
         
         return {
-            "tour": tour,
-            "cost": cost,
-            "visualization_path": "/data/outputs/api_result.png",
-            "json_path": "/data/outputs/api_result.json",
-            "csv_path": "/data/outputs/api_result.csv"
+            "image_data": encoded_image,
+            "json_data": json_data,
         }
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error processing file: {str(e)}")
