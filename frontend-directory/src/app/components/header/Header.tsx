@@ -30,7 +30,7 @@ const Header: React.FC<HeaderProps> = ({ authenticated, displayActions }) => {
   }, [dropdownRef]);
 
   return (
-    <header className="w-full bg-white py-4 px-20 shadow-md">
+    <header className="bg-white py-4 px-20 shadow-md">
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <div className="text-3xl font-bold">PP</div>
