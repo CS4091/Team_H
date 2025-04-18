@@ -11,7 +11,7 @@ interface RootLayoutProps {
 export default function MainLayout({ children }: RootLayoutProps) {
     return (
         <div>
-            <Header authenticated={true} displayActions={true}/>
+            <Header authenticated={false} displayActions={true}/>
                 <div className='py-4 px-4 min-h-[calc(100vh-72px)]'>
                     {children}
                 </div>
