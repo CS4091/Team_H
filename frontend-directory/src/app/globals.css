@@ -33,6 +33,7 @@ h1 {
 h2 {
   @apply md:text-[48.83px] !important;
 }
+
 h3 {
   @apply md:text-[39.06px] !important;
 }
@@ -55,4 +56,11 @@ p {
 
 small {
   @apply md:text-[12.8px] !important;
+}
+
+@keyframes glide {
+  100% {
+    top: 85vh;
+    left: 100vw;
+  }
 }
