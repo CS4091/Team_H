@@ -1,14 +1,11 @@
 import Image from 'next/image';
-// import FileUpload from '../components/FileUpload';
-// import ResultsDisplay from '../components/ResultsDisplay';
-// import { TSPResult } from '../api/tspClient';
 import FlightIcon from '@mui/icons-material/Flight';
-import Features from "./components/Features";
+import Features from "@/components/Features";
 import Link from 'next/link';
 
-export default function Home() {
-  return (
-    <>
+export default function LandingPage() {
+    return (
+      <>
       <section id="home" className="pt-16 pb-20">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center">
@@ -50,5 +47,5 @@ export default function Home() {
       </div>
       <Features />
     </>
-  );
+    );
 }

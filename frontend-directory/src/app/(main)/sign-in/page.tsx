@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { TextField, Snackbar } from "@mui/material"
-import Button from "@/components/Button";
+import Button from '@/components/Button';
 import { useRouter } from "next/navigation";
 
 import supabase from '@/api/supabaseClient';
@@ -57,11 +57,10 @@ export default function SignInPage() {
                         },
                     }}
                 />
-                <Button
-                    text={loading ? 'Logging in...' : 'Login'}
+                <Button 
+                    text='Login'
                     onClick={handleLogin}
                     fillContainer={true}
-                    disabled={loading}
                 />
             </div>
         </div>
