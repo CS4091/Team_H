@@ -1,5 +1,3 @@
-import 
-
 interface Button {
     text: string;
     onClick: () => void;

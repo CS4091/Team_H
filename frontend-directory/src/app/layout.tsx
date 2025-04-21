@@ -1,10 +1,8 @@
 "use client";
 
 import { Inter } from "next/font/google";
+import { Provider } from "@/components/ui/provider";
 import "./globals.css";
-import Footer from "./components/Footer";
-import Header from "./components/header/Header";
-import { useState } from "react";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 
@@ -13,13 +11,12 @@ interface RootLayoutProps {
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
-
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
-        <main className="">
-          {children}
-        </main>
+          <main className="">
+            {children}
+          </main>
       </body>
     </html>
   );
