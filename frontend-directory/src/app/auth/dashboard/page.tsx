@@ -76,7 +76,7 @@ export default function DashboardPage() {
 
     return (
         <div className="flex flex-col h-screen justify-center items-center">
-            <div className="flex flex-wrap gap-[30px]">
+            <div className="flex flex-wrap justify-center gap-[50px]">
                 {routes.map((route, index) => (
                     <RouteCard
                         key={index}
