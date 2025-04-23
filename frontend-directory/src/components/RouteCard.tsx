@@ -14,11 +14,11 @@ interface RouteCardProps {
 // this card will automatically call the google api to generate the static image
 export default function RouteCard({ name, date, totalKilometers, currentNode }: RouteCardProps) {
     return (
-        <div className='w-fill h-full rounded-lg outline shadow-lg'>
+        <div className='w-fill h-fill rounded-lg outline shadow-lg'>
             <Image
                 src="/dummyThumbnail.png"
                 alt={`Map of ${name} route`}
-                width={700}
+                width={500}
                 height={100}
             />
             <div className='w-fill h-full'>

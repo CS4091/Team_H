@@ -26,6 +26,48 @@ export default function DashboardPage() {
             totalKilometers: 23452,
             currentNode: 0,
         },
+        {
+            name: "Hide Shippings",
+            dateCreated: "2025-04-12T14:23:45.123+00:00",
+            totalKilometers: 23452,
+            currentNode: 0,
+        },
+        {
+            name: "Hide Shippings",
+            dateCreated: "2025-04-12T14:23:45.123+00:00",
+            totalKilometers: 23452,
+            currentNode: 0,
+        },
+        {
+            name: "Hide Shippings",
+            dateCreated: "2025-04-12T14:23:45.123+00:00",
+            totalKilometers: 23452,
+            currentNode: 0,
+        },
+        {
+            name: "Hide Shippings",
+            dateCreated: "2025-04-12T14:23:45.123+00:00",
+            totalKilometers: 23452,
+            currentNode: 0,
+        },
+        {
+            name: "Hide Shippings",
+            dateCreated: "2025-04-12T14:23:45.123+00:00",
+            totalKilometers: 23452,
+            currentNode: 0,
+        },
+        {
+            name: "Hide Shippings",
+            dateCreated: "2025-04-12T14:23:45.123+00:00",
+            totalKilometers: 23452,
+            currentNode: 0,
+        },
+        {
+            name: "Hide Shippings",
+            dateCreated: "2025-04-12T14:23:45.123+00:00",
+            totalKilometers: 23452,
+            currentNode: 0,
+        },
     ]);
 
     useEffect(() => {
@@ -34,7 +76,7 @@ export default function DashboardPage() {
 
     return (
         <div className="flex flex-col h-screen justify-center items-center">
-            <div className="flex flex-wrap">
+            <div className="flex flex-wrap gap-[30px]">
                 {routes.map((route, index) => (
                     <RouteCard
                         key={index}

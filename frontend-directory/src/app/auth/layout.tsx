@@ -2,6 +2,7 @@
 
 import { ReactNode } from 'react';
 import SidePanel from '@/components/SidePanel';
+import Header from '@/components/header/Header';
 import { useSelectedLayoutSegment } from "next/navigation"
 import { UserContextProvider } from '../../contexts/UserContextProvider';
 
@@ -14,9 +15,11 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
 
     return (
         <UserContextProvider>
-            <div className='flex flex-row'>
+            <div className='flex h-screen'>
                 <SidePanel currentPage={segment}/>
-                {children}
+                <main className='flex-1 overflow-y-auto px=[15px]'>
+                    {children}
+                </main>
             </div>
         </UserContextProvider>
     );  
