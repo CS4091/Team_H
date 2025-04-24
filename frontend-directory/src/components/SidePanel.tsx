@@ -6,7 +6,7 @@ interface SidePanelProps {
 
 export default function SidePanel({ currentPage }: SidePanelProps) {
     return (
-        <nav className='sticky top-0 left-0 h-fill w-fill bg-[#f7f7fc] flex gap-[30px] pt-[20px] shadow-lg'>
+        <nav className='h-full w-fill bg-[#f7f7fc] flex gap-[30px] pt-[20px] shadow-lg'>
             <div className='flex flex-col gap-[30px] px-[20px] justify-start items-center'>
                 <div>
                     <svg width="40" height="40" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">

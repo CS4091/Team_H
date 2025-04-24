@@ -84,8 +84,9 @@ export default function DashboardPage() {
 
     }, []);
 
-    return (
-        <div className="flex flex-col h-screen pt-[500px] justify-center items-center outline">
+    // h-fill is very important
+    return ( 
+        <div className="flex flex-col h-fill justify-center items-center">
             <div className="flex flex-wrap justify-center gap-[50px]">
                 {routes.map((route, index) => (
                     <RouteCard
