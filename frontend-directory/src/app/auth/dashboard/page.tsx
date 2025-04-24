@@ -10,60 +10,70 @@ export default function DashboardPage() {
     const [routes, setRoutes] = useState([
         {
             name: "Hide Shippings",
+            aircraftName: "Boeing 747-8",
             dateCreated: "2025-04-12T14:23:45.123+00:00",
             totalKilometers: 23452,
             currentNode: 0,
         },
         {
             name: "Hide Shippings",
+            aircraftName: "Boeing 747-8",
             dateCreated: "2025-04-12T14:23:45.123+00:00",
             totalKilometers: 23452,
             currentNode: 0,
         },
         {
             name: "Hide Shippings",
+            aircraftName: "Boeing 747-8",
             dateCreated: "2025-04-12T14:23:45.123+00:00",
             totalKilometers: 23452,
             currentNode: 0,
         },
         {
             name: "Hide Shippings",
+            aircraftName: "Boeing 747-8",
             dateCreated: "2025-04-12T14:23:45.123+00:00",
             totalKilometers: 23452,
             currentNode: 0,
         },
         {
             name: "Hide Shippings",
+            aircraftName: "Boeing 747-8",
             dateCreated: "2025-04-12T14:23:45.123+00:00",
             totalKilometers: 23452,
             currentNode: 0,
         },
         {
             name: "Hide Shippings",
+            aircraftName: "Boeing 747-8",
             dateCreated: "2025-04-12T14:23:45.123+00:00",
             totalKilometers: 23452,
             currentNode: 0,
         },
         {
             name: "Hide Shippings",
+            aircraftName: "Boeing 747-8",
             dateCreated: "2025-04-12T14:23:45.123+00:00",
             totalKilometers: 23452,
             currentNode: 0,
         },
         {
             name: "Hide Shippings",
+            aircraftName: "Boeing 747-8",
             dateCreated: "2025-04-12T14:23:45.123+00:00",
             totalKilometers: 23452,
             currentNode: 0,
         },
         {
             name: "Hide Shippings",
+            aircraftName: "Boeing 747-8",
             dateCreated: "2025-04-12T14:23:45.123+00:00",
             totalKilometers: 23452,
             currentNode: 0,
         },
         {
             name: "Hide Shippings",
+            aircraftName: "Boeing 747-8",
             dateCreated: "2025-04-12T14:23:45.123+00:00",
             totalKilometers: 23452,
             currentNode: 0,
@@ -75,11 +85,13 @@ export default function DashboardPage() {
     }, []);
 
     return (
-        <div className="flex flex-col h-screen justify-center items-center">
+        <div className="flex flex-col h-screen pt-[500px] justify-center items-center outline">
             <div className="flex flex-wrap justify-center gap-[50px]">
                 {routes.map((route, index) => (
                     <RouteCard
                         key={index}
+                        thumbnail={"/dummyThumbnail.png"}
+                        aircraftName={route.aircraftName}
                         name={route.name}
                         date={formatDate(route.dateCreated)}
                         totalKilometers={route.totalKilometers}

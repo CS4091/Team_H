@@ -17,7 +17,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         <UserContextProvider>
             <div>
                 <AuthHeader/>
-                <div className='flex h-full'>
+                <div className='flex h-fill'>
                     <SidePanel currentPage={segment}/>
                     <main className='flex-1 overflow-y-auto pl-[50px]'>
                         {children}
@@ -25,5 +25,5 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
                 </div>
             </div>
         </UserContextProvider>
-    );  
+    );
 };

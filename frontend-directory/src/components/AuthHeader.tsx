@@ -29,7 +29,7 @@ export default function AuthHeader({ routeName }: AuthHeaderProps) {
   }, [dropdownRef]);
 
   return (
-    <header className=" sticky bg-white py-4 px-20 shadow-md">
+    <header className="sticky bg-white py-4 px-20 shadow-md">
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <div className="text-3xl font-bold">PP</div>
