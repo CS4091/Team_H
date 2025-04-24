@@ -6,7 +6,7 @@ interface SidePanelProps {
 
 export default function SidePanel({ currentPage }: SidePanelProps) {
     return (
-        <nav className='h-screen w-fill bg-[#f7f7fc] flex gap-[30px] pt-[20px] shadow-lg mr-[70px]'>
+        <nav className='h-full w-fill bg-[#f7f7fc] flex gap-[30px] pt-[20px] shadow-lg'>
             <div className='flex flex-col gap-[30px] px-[20px] justify-start items-center'>
                 <div>
                     <svg width="40" height="40" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -44,6 +44,13 @@ export default function SidePanel({ currentPage }: SidePanelProps) {
                     >
                         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="icon icon-tabler icons-tabler-outline icon-tabler-home"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
                         <h6>New route</h6>
+                    </a>
+                    <a
+                        className="flex flex-row gap-[8px] justify-center items"
+                        href="/auth/route-generator"
+                    >
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="icon icon-tabler icons-tabler-outline icon-tabler-home"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
+                        <h6>Analyze Algorithms</h6>
                     </a>
                 </div>
             </div>
