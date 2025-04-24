@@ -1,41 +1,76 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { useRef } from 'react';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { IoAirplaneOutline } from "react-icons/io5";
 
 interface RouteCardProps {
-    name: string;
-    thumbnail: string;
-    date: string;
-    aircraftName: string;
-    totalKilometers: number;
-    currentNode: number;
+  name: string;
+  thumbnail: string;
+  date: string;
+  aircraftName: string;
+  totalKilometers: number;
+  currentNode: number;
 }
 
+export default function RouteCard({
+  name,
+  thumbnail,
+  date,
+  aircraftName,
+  totalKilometers,
+  currentNode
+}: RouteCardProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
 
-// this card will automatically takes in thumbnail passed in
-// anytime route data is updated
-export default function RouteCard({ name, thumbnail, date, aircraftName, totalKilometers, currentNode }: RouteCardProps) {
-    return (
-        <div className='flex flex-col w-fill h-fill rounded-lg shadow-lg'>
-            <div className='flex justify-between w-fill h-full py-[10px] px-[10px]'>
-                <div>
-                    <h6 className='font-bold'>{name}</h6>
-                    <div className='flex gap-[5px] justiyf-center items-center'>
-                        <IoAirplaneOutline/>
-                        <p>{aircraftName}</p>
-                    </div>
+  // track pointer offset from center
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  // map pointer offsets to rotation angles
+  const rotateY = useTransform(x, [-100, 100], [15, -15]);
+  const rotateX = useTransform(y, [-100, 100], [-15, 15]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    x.set(e.clientX - rect.left - rect.width / 2);
+    y.set(e.clientY - rect.top - rect.height / 2);
+  };
+
+  return (
+    <a href=''>
+        <motion.div
+        ref={cardRef}
+        className=" w-[400px] rounded-lg shadow-lg bg-white overflow-hidden"
+        style={{ 
+            perspective: 800,
+            rotateX, 
+            rotateY 
+        }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={() => { x.set(0); y.set(0); }}
+        whileHover={{ scale: 1.03 }}
+        transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+        >
+        <div className='flex flex-col h-full'>
+            <div className='p-4 flex justify-between'>
+            <div>
+                <h6 className='font-bold'>{name}</h6>
+                <div className='flex gap-1 items-center'>
+                <IoAirplaneOutline />
+                <p className='text-sm'>{aircraftName}</p>
                 </div>
-                <p>{date}</p>
+            </div>
+            <p className='text-sm text-gray-500'>{date}</p>
             </div>
             <img
-                src={thumbnail}
-                alt={`Map of ${name} route`}
-                className='object-cover rounded-b-lg'
-                width={500}
-                height={100}
+            src={thumbnail}
+            alt={`Map of ${name} route`}
+            className='object-cover flex-1'
             />
         </div>
-    );
+        </motion.div>
+    </a>
+  );
 }
