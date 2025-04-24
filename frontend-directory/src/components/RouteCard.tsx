@@ -37,12 +37,13 @@ export default function RouteCard({
     x.set(e.clientX - rect.left - rect.width / 2);
     y.set(e.clientY - rect.top - rect.height / 2);
   };
-
+//55, 132, 240, 0.5
   return (
     <a href=''>
         <motion.div
         ref={cardRef}
-        className=" w-[400px] rounded-lg shadow-lg bg-white overflow-hidden"
+        className=" w-[400px] rounded-lg shadow-[5px_8px_10px_1px_rgba(55,132,240,0.25)]
+ bg-white overflow-hidden"
         style={{ 
             perspective: 800,
             rotateX, 
