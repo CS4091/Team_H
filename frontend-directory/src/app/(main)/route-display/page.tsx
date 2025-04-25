@@ -12,7 +12,7 @@ export default function RouteDisplayPage() {
   const ref = useRef<HTMLDivElement>(null) as React.RefObject<HTMLInputElement>;
   const { events } = useDraggable(ref);
 
-  const [currentStep, setCurrentStep] = useState(2);
+  const [currentStep, setCurrentStep] = useState(0);
 
   const mockTripSteps = [
     { city: "Atlanta", region: "Georgia, USA" },
@@ -24,6 +24,13 @@ export default function RouteDisplayPage() {
     { city: "Antwerp", region: "Belgium" },
     { city: "Buenos Aires", region: "Argentina" },
   ];
+
+  const mockStats = {
+    totalCost: "$1208.28",
+    totalDistance: "1285.28km",
+    totalTravelTime: "1 day, 13 hours, 53 minutes",
+    routeGenerationDate: "May 17th, 2025",
+  };
 
   return (
     <>
@@ -50,27 +57,27 @@ export default function RouteDisplayPage() {
                   <div className="h-[14px]" />
                   Estimated Total Cost:
                   <br />
-                  $1208.28
+                  {mockStats.totalCost}
                 </div>
                 <div className="border-2 border-solid rounded-lg p-2 text-center">
                   💲
                   <div className="h-[14px]" />
-                  Estimated Total Cost:
+                  Total Distance Traveled:
                   <br />
-                  $1208.28
+                  {mockStats.totalDistance}
                 </div>
                 <div className="border-2 border-solid rounded-lg p-2 text-center">
                   💲
                   <div className="h-[14px]" />
-                  Estimated Total Cost:
+                  Estimated Travel Time:
                   <br />
-                  $1208.28
+                  {mockStats.totalTravelTime}
                 </div>
               </div>
               <div className="border-2 border-solid rounded-lg p-1 text-center italic text-gray-500 text-[12px]">
                 Route Generation Date:
                 <br />
-                May 17th, 2025
+                {mockStats.routeGenerationDate}
               </div>
             </div>
           </div>
