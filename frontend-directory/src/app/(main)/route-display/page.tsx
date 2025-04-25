@@ -19,7 +19,7 @@ export default function RouteDisplayPage() {
           SIDEBAR PLACEHOLDER
         </nav>
 
-        <div className="w-full h-[89.5svh] gap-1 flex flex-col">
+        <div className="w-full max-w-[88%] h-[89.5svh] gap-1 flex flex-col">
           <div className="w-full h-[71%] flex flex-row gap-1">
             {/* Map Section */}
             <div className="rounded-lg border-2 border-solid w-full h-full bg-red-100">
