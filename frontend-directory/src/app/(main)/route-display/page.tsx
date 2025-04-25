@@ -1,14 +1,30 @@
 "use client";
 
-// NOTE: THIS PAGE AND 'route-display' DIRECTORY SHOULD BE MOVED UNDER AUTH ONCE FINISHED
-
 import Image from "next/image";
 
 import { useRef, useState } from "react";
 import { useDraggable } from "react-use-draggable-scroll";
 import React from "react";
 
-export default function RouteDisplayPage() {
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+import ScheduleIcon from "@mui/icons-material/Schedule";
+
+interface RouteDisplayProps {
+  currentStep: number;
+  tripSteps: [{ city: string; region: string }];
+  tripStats: [
+    {
+      tripName: string;
+      totalCost: string;
+      totalDistance: string;
+      totalTravelTime: string;
+      routeGenerationDate: string;
+    }
+  ];
+}
+
+export default function RouteDisplayPage({}: RouteDisplayProps) {
   const ref = useRef<HTMLDivElement>(null) as React.RefObject<HTMLInputElement>;
   const { events } = useDraggable(ref);
 
@@ -26,6 +42,7 @@ export default function RouteDisplayPage() {
   ];
 
   const mockStats = {
+    tripName: "Goated Trip",
     totalCost: "$1208.28",
     totalDistance: "1285.28km",
     totalTravelTime: "1 day, 13 hours, 53 minutes",
@@ -49,32 +66,36 @@ export default function RouteDisplayPage() {
             {/* Trip Stats Section */}
             <div className="w-1/3 p-3 justify-between flex flex-col bg-white rounded-lg border-2 border-solid">
               <div className="font-bold text-[34px] text-center leading-[1.1] pt-2">
-                “Goated Trip” from Atlanta to Boston
+                “{mockStats.tripName}” <br />
+                <span className="italic text-[13px] font-normal underline bg-yellow-300 p-1 px-3 rounded">
+                  {mockTripSteps[0].city} →{" "}
+                  {mockTripSteps[mockTripSteps.length - 1].city}
+                </span>
               </div>
               <div className="flex flex-col gap-2">
-                <div className="border-2 border-solid rounded-lg p-2 text-center">
-                  💲
+                <div className="border-2 border-solid border-gray-300 rounded-lg p-2 text-center bg-gray-200">
+                  <AttachMoneyIcon className="text-[36px] mb-[-2px]" />
                   <div className="h-[14px]" />
                   Estimated Total Cost:
                   <br />
                   {mockStats.totalCost}
                 </div>
-                <div className="border-2 border-solid rounded-lg p-2 text-center">
-                  💲
+                <div className="border-2 border-solid border-gray-300 rounded-lg p-2 text-center bg-gray-200">
+                  <FlightTakeoffIcon className="text-[36px] mb-[-2px]" />
                   <div className="h-[14px]" />
                   Total Distance Traveled:
                   <br />
                   {mockStats.totalDistance}
                 </div>
-                <div className="border-2 border-solid rounded-lg p-2 text-center">
-                  💲
+                <div className="border-2 border-solid border-gray-300 rounded-lg p-2 text-center bg-gray-200">
+                  <ScheduleIcon className="text-[36px] mb-[-2px]" />
                   <div className="h-[14px]" />
                   Estimated Travel Time:
                   <br />
                   {mockStats.totalTravelTime}
                 </div>
               </div>
-              <div className="border-2 border-solid rounded-lg p-1 text-center italic text-gray-500 text-[12px]">
+              <div className="border-2 border-solid border-gray-300 rounded-lg p-1 text-center italic text-gray-500 text-[12px] bg-gray-200">
                 Route Generation Date:
                 <br />
                 {mockStats.routeGenerationDate}
