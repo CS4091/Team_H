@@ -44,7 +44,7 @@ const Footer = () => {
           </div>
 
           <div className="flex flex-col space-y-2">
-            <h3 className="font-semibold text-lg pb-5">Pink Pony Facts</h3>
+            <h5 className="font-semibold text-lg pb-5">Pink Pony Facts</h5>
             <a href="#" className="hover:text-gray-400">
               Birthplace
             </a>
@@ -54,7 +54,7 @@ const Footer = () => {
           </div>
 
           <div className="flex flex-col space-y-2">
-            <h3 className="font-semibold text-lg pb-5">Terms & Conditions</h3>
+            <h5 className="font-semibold text-lg pb-5">Terms & Conditions</h5>
             <a href="#" className="hover:text-gray-400">
               Terms
             </a>
@@ -64,7 +64,7 @@ const Footer = () => {
           </div>
 
           <div className="flex flex-col space-y-2">
-            <h3 className="font-semibold text-lg pb-5">Fair Use</h3>
+            <h5 className="font-semibold text-lg pb-5">Fair Use</h5>
             <a href="#" className="hover:text-gray-400">
               Use this is you want
             </a>
@@ -74,7 +74,7 @@ const Footer = () => {
           </div>
 
           <div className="flex flex-col space-y-2">
-            <h3 className="font-semibold text-lg pb-5">Missouri S&T</h3>
+            <h5 className="font-semibold text-lg pb-5">Missouri S&T</h5>
             <a href="#" className="hover:text-gray-400">
               Go Miners
             </a>
