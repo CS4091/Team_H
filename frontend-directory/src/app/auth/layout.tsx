@@ -28,7 +28,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
           </aside>
 
           {/* Scrollable main content */}
-          <main className="flex-1 overflow-y-auto pl-[50px] pt-[50px]">
+          <main className="flex-1 overflow-y-auto">
             {children}
           </main>
         </div>
