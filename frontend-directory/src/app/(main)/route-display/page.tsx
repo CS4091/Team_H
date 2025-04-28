@@ -1,14 +1,10 @@
 "use client";
 
-import Image from "next/image";
-
-import { useRef, useState } from "react";
-import { useDraggable } from "react-use-draggable-scroll";
+import { useState } from "react";
 import React from "react";
 
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
-import ScheduleIcon from "@mui/icons-material/Schedule";
+import RouteStatsPanel from "@/components/RouteStatsPanel";
+import RouteCitiesPanel from "@/components/RouteCitiesPanel";
 
 interface RouteDisplayProps {
   currentStep: number;
@@ -16,6 +12,7 @@ interface RouteDisplayProps {
   tripStats: [
     {
       tripName: string;
+      aircraftName: string;
       totalCost: string;
       totalDistance: string;
       totalTravelTime: string;
@@ -25,10 +22,7 @@ interface RouteDisplayProps {
 }
 
 export default function RouteDisplayPage({}: RouteDisplayProps) {
-  const ref = useRef<HTMLDivElement>(null) as React.RefObject<HTMLInputElement>;
-  const { events } = useDraggable(ref);
-
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(3);
 
   const mockTripSteps = [
     { city: "Atlanta", region: "Georgia, USA" },
@@ -43,6 +37,7 @@ export default function RouteDisplayPage({}: RouteDisplayProps) {
 
   const mockStats = {
     tripName: "Goated Trip",
+    aircraftName: "Boeing 737",
     totalCost: "$1208.28",
     totalDistance: "1285.28km",
     totalTravelTime: "1 day, 13 hours, 53 minutes",
@@ -63,110 +58,25 @@ export default function RouteDisplayPage({}: RouteDisplayProps) {
               GOOGLE MAPS PLACEHOLDER
             </div>
 
-            {/* Trip Stats Section */}
-            <div className="w-1/3 p-3 justify-between flex flex-col bg-white rounded-lg border-2 border-solid">
-              <div className="font-bold text-[34px] text-center leading-[1.1] pt-2">
-                “{mockStats.tripName}” <br />
-                <span className="italic text-[13px] font-normal underline bg-yellow-300 p-1 px-3 rounded">
-                  {mockTripSteps[0].city} →{" "}
-                  {mockTripSteps[mockTripSteps.length - 1].city}
-                </span>
-              </div>
-              <div className="flex flex-col gap-2">
-                <div className="border-2 border-solid border-gray-300 rounded-lg p-2 text-center bg-gray-200">
-                  <AttachMoneyIcon className="text-[36px] mb-[-2px]" />
-                  <div className="h-[14px]" />
-                  Estimated Total Cost:
-                  <br />
-                  {mockStats.totalCost}
-                </div>
-                <div className="border-2 border-solid border-gray-300 rounded-lg p-2 text-center bg-gray-200">
-                  <FlightTakeoffIcon className="text-[36px] mb-[-2px]" />
-                  <div className="h-[14px]" />
-                  Total Distance Traveled:
-                  <br />
-                  {mockStats.totalDistance}
-                </div>
-                <div className="border-2 border-solid border-gray-300 rounded-lg p-2 text-center bg-gray-200">
-                  <ScheduleIcon className="text-[36px] mb-[-2px]" />
-                  <div className="h-[14px]" />
-                  Estimated Travel Time:
-                  <br />
-                  {mockStats.totalTravelTime}
-                </div>
-              </div>
-              <div className="border-2 border-solid border-gray-300 rounded-lg p-1 text-center italic text-gray-500 text-[12px] bg-gray-200">
-                Route Generation Date:
-                <br />
-                {mockStats.routeGenerationDate}
-              </div>
+            <div className="w-1/3">
+              <RouteStatsPanel
+                tripName={mockStats.tripName}
+                aircraftName={mockStats.aircraftName}
+                startCity={mockTripSteps[0].city}
+                endCity={mockTripSteps[mockTripSteps.length - 1].city}
+                totalCost={mockStats.totalCost}
+                totalDistance={mockStats.totalDistance}
+                totalTravelTime={mockStats.totalTravelTime}
+                routeGenerationDate={mockStats.routeGenerationDate}
+              />
             </div>
           </div>
 
-          {/* LocationCard Navigation Section */}
-          <div
-            className="h-[29%] rounded-lg border-2 border-solid px-16 flex flex-col justify-center overflow-x-auto scrollbar-hide select-none gap-16 cursor-[grab]"
-            {...events}
-            ref={ref}
-          >
-            <div className="flex gap-[150px] min-w-max relative">
-              {mockTripSteps.map((step, index) => (
-                <div
-                  key={step.city}
-                  className={`
-                    relative flex flex-col items-center justify-center w-[160px] h-[100px]
-                    rounded-xl shadow-md hover:shadow-xl text-s text-center cursor-pointer 
-                    ${
-                      index === currentStep
-                        ? "bg-blue-200 font-semibold"
-                        : "bg-blue-50 hover:bg-blue-100 active:bg-blue-200"
-                    }
-                  `}
-                  onClick={() => setCurrentStep(index)}
-                >
-                  <span className="absolute top-1 left-2 italic text-xs text-gray-400">
-                    {index + 1}
-                  </span>
-                  {step.city}
-                  <span className="text-gray-400 italic">{step.region}</span>
-                </div>
-              ))}
-              <div
-                className="absolute z-10 top-[110px]"
-                style={{ left: `calc(${currentStep} * 310px + 42px)` }}
-              >
-                <Image
-                  width={70}
-                  height={70}
-                  src="/PlaneSilhouette.png"
-                  alt="A plane silhouette"
-                  className="opacity-65"
-                />
-              </div>
-            </div>
-
-            <div className="ml-16 flex items-center min-w-max">
-              {mockTripSteps.map((step, index) => (
-                <React.Fragment key={index}>
-                  <span
-                    className={`w-6 h-3 rounded-full mx-1
-                    ${
-                      index < currentStep
-                        ? "bg-gray-400"
-                        : index === currentStep
-                        ? "bg-yellow-500"
-                        : "bg-gray-200"
-                    }`}
-                  />
-                  {index < mockTripSteps.length - 1 && (
-                    <span
-                      className={`w-[270px] h-1 mx-1
-                      ${index < currentStep ? "bg-gray-400" : "bg-gray-200"}`}
-                    />
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
+          <div className="h-[29%]">
+            <RouteCitiesPanel
+              currentStep={currentStep}
+              tripSteps={mockTripSteps}
+            />
           </div>
         </div>
       </div>
