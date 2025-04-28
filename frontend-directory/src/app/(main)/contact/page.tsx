@@ -22,7 +22,7 @@ export default function ContactForm() {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full py-12">
       <div className="text-center mb-6">
         <h1 className="text-3xl font-bold mb-3">Want to Contact Us?</h1>
         <p className="text-gray-600">Fill out this form to give us your thoughts!</p>
