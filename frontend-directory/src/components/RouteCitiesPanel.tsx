@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { useRef } from "react";
 import { useDraggable } from "react-use-draggable-scroll";
@@ -17,9 +17,21 @@ export default function RouteCitiesPanel({
   const ref = useRef<HTMLDivElement>(null) as React.RefObject<HTMLInputElement>;
   const { events } = useDraggable(ref);
 
+  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+  useEffect(() => {
+    if (cardRefs.current[currentStep]) {
+      cardRefs.current[currentStep]?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+    }
+  }, [currentStep]);
+
   return (
     <div
-      className="w-full h-full rounded-lg border-2 border-solid px-16 flex flex-col
+      className="w-full rounded-lg border-2 border-solid bg-white py-4 px-16 flex flex-col
         justify-center overflow-x-auto scrollbar-hide select-none gap-16 cursor-[grab]"
       {...events}
       ref={ref}
@@ -27,7 +39,10 @@ export default function RouteCitiesPanel({
       <div className="flex gap-[150px] min-w-max relative">
         {tripSteps.map((step, index) => (
           <div
-            key={step.city}
+            key={index}
+            ref={(el) => {
+              cardRefs.current[index] = el;
+            }}
             className={`
               relative flex flex-col items-center justify-center w-[160px] h-[100px]
               rounded-xl shadow-md text-s text-center 
@@ -38,9 +53,9 @@ export default function RouteCitiesPanel({
               }
             `}
           >
-            <span className="absolute top-1 left-2 italic text-xs text-gray-400">
+            {/* <span className="absolute top-1 left-2 italic text-xs text-gray-400">
               {index + 1}
-            </span>
+            </span> */}
             {step.city}
             <span className="text-gray-400 italic">{step.region}</span>
           </div>
