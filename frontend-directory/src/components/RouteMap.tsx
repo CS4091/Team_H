@@ -29,7 +29,7 @@ export default function RouteMap({ airports }: RouteMapProps ) {
     }), []);
 
     const svgUrl = '/airportNode.svg';
-    
+    const startSvgUrl = '/startAirportNode.svg';
 
     const onLoad = useCallback((map) => {
         mapRef.current = map;
@@ -60,17 +60,32 @@ export default function RouteMap({ airports }: RouteMapProps ) {
             zoom={3}
             options={options}
         >
-            {airports.map(({ name, lat, long }) => (
-                <Marker
-                    key={name}
-                    position={{ lat, lng: long }}
-                    title={name}
-                    icon={{
-                        url: svgUrl,                            // path to your SVG
-                        scaledSize: new window.google.maps.Size(32, 32), // pixel size you want it drawn
-                        anchor:   new window.google.maps.Point(16, 32)   // anchor so the “tip” sits on the lat/lng
-                    }}
-                />
+            {airports.map(({ name, lat, long }, index) => (
+                <>
+                    {index === 0 ? (
+                        <Marker
+                            key={name}
+                            position={{ lat, lng: long }}
+                            title={name}
+                            icon={{
+                                url: startSvgUrl,                            // path to your SVG
+                                scaledSize: new window.google.maps.Size(32, 32), // pixel size you want it drawn
+                                anchor:   new window.google.maps.Point(16, 32)   // anchor so the “tip” sits on the lat/lng
+                            }}
+                        />
+                    ) : (
+                        <Marker
+                            key={name}
+                            position={{ lat, lng: long }}
+                            title={name}
+                            icon={{
+                                url: svgUrl,                            // path to your SVG
+                                scaledSize: new window.google.maps.Size(32, 32), // pixel size you want it drawn
+                                anchor:   new window.google.maps.Point(16, 32)   // anchor so the “tip” sits on the lat/lng
+                            }}
+                        />
+                    )}
+                </>
             ))}
         </GoogleMap>
     );
