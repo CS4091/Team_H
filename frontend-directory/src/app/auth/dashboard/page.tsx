@@ -102,7 +102,7 @@ export default function DashboardPage() {
 
     // h-fill is very important
     return (
-        <div className="flex flex-col min-h-screen justify-center items-center">
+        <div className="flex flex-col min-h-screen justify-center items-center pl-[50px] pt-[50px]">
           <motion.div
             className="flex flex-wrap justify-center gap-12"
             variants={containerVariants}
