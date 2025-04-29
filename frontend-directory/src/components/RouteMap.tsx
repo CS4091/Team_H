@@ -28,6 +28,7 @@ export default function RouteMap({ airports }: RouteMapProps ) {
         clickableIcons: false,
     }), []);
 
+    const svgUrl = '/airportNode.svg';
     
 
     const onLoad = useCallback((map) => {
@@ -59,7 +60,18 @@ export default function RouteMap({ airports }: RouteMapProps ) {
             zoom={3}
             options={options}
         >
-            <Marker position={center} />
+            {airports.map(({ name, lat, long }) => (
+                <Marker
+                    key={name}
+                    position={{ lat, lng: long }}
+                    title={name}
+                    icon={{
+                        url: svgUrl,                            // path to your SVG
+                        scaledSize: new window.google.maps.Size(32, 32), // pixel size you want it drawn
+                        anchor:   new window.google.maps.Point(16, 32)   // anchor so the “tip” sits on the lat/lng
+                    }}
+                />
+            ))}
         </GoogleMap>
     );
 }

@@ -5,8 +5,11 @@ import RouteOptions from '@/components/RouteOptions';
 import ChipBar from '@/components/ChipBar';
 import dynamic from "next/dynamic";
 import RouteMap from '@/components/RouteMap';
+import { RouteProvider } from '@/contexts/RouteOptionsContext';
 import { useRouter } from 'next/navigation';
 import supabase from '@/api/supabaseClient';
+import { airportType } from '@/types';
+import airports from '@/constants/airports';
 
 // no SSR
 /*
@@ -14,6 +17,19 @@ const DynamicMap = dynamic(
     () => import("@/components/RouteMap").then((mod) => mod.GoogleMapClient),
     { ssr: false }
 );*/
+
+const selectedAirports: airportType[] = [
+    {
+        name: 'Abu Dhabi International Airport',
+        lat: 24.433,
+        long: 54.6511
+    },
+    {
+        name: 'Menongue Airport',
+        lat: -14.6576,
+        long: 17.7198
+    }
+];
 
 export default function CreateRoutePage() {
     const router = useRouter();
@@ -53,15 +69,17 @@ export default function CreateRoutePage() {
     }
 
     return (
-        <div className='relative h-full'>
-            <div className='absolute h-full z-10 pl-[50px] py-[50px]'>
-               <RouteOptions onClick={handleGenerateRoute}/> 
+        <RouteProvider>
+            <div className='relative h-full'>
+                <div className='absolute h-full z-10 pl-[50px] py-[50px]'>
+                <RouteOptions onClick={handleGenerateRoute}/> 
+                </div>
+                {/* <div className='absolute h-fill justify-end z-10 px-[200px] '>
+                    <ChipBar/>
+                </div> */}
+                {/* <DynamicMap/> */}
+                <RouteMap airports={selectedAirports}/>
             </div>
-            {/* <div className='absolute h-fill justify-end z-10 px-[200px] '>
-                <ChipBar/>
-            </div> */}
-            {/* <DynamicMap/> */}
-            <RouteMap/>
-        </div>
+        </RouteProvider>
     );
 };
