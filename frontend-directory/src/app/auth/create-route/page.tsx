@@ -37,10 +37,9 @@ export default function CreateRoutePage() {
     const [name, setName] = useState<string>('Example Route');
     const [total_km, setTotal_km] = useState<number>(0);
     const [km_covered, setKm_covered] = useState<number>(0);
-    const [airports, setAirports] = useState<string[]>([]); // the first airport in the list will be assumed as the starting and ending location
+    const [airports, setAirports] = useState<airportType[]>([]); // the first airport in the list will be assumed as the starting and ending location
+    const [startAirport, setStartAirport] = useState<airportType>();
     const [tour, setTour] = useState<number[]>([0, 1, 2, 0]);
-    const [lattitudes, setLattitudes] = useState<number[]>([]);
-    const [longitudes, setLongitudes] = useState<number[]>([]);
 
     const [loading, setLoading] = useState<boolean>(false);
     
