@@ -57,7 +57,7 @@ export default function RouteDisplayPage() {
                 setAircraft(data.aircraft);
                 setCurrentStep(data.current_step);
                 const zippedUpAirports: airportType[] = zipAirportData(
-                    data.airport_codes, 
+                    data.airport_names, 
                     data.airport_codes,
                     data.lat,
                     data.long
@@ -151,7 +151,7 @@ export default function RouteDisplayPage() {
                 <SolvedMap 
                     airports={airports}
                     tour={tour}
-                    currentNode={tour[currentStep]}
+                    currentStep={currentStep}
                     onMapLoad={handleMapLoad}
                 />
             } 

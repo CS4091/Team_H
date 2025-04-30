@@ -14,14 +14,14 @@ type MapOptions = google.maps.MapOptions;
 interface SolvedMapProps {
     airports: airportType[];
     tour: number[];
-    currentNode: number;
+    currentStep: number;
     onMapLoad: (map: google.maps.Map) => void;  // new!
 }
 
 export default function RouteMap({
   airports,
   tour,
-  currentNode,
+  currentStep,
   onMapLoad,
 }: SolvedMapProps) {
   const mapRef = useRef<GoogleMap>();
@@ -57,18 +57,18 @@ export default function RouteMap({
   }, [tour, airports]);
 
   // Compute rotation angle (degrees) for the plane icon
-  const planeHeading = useMemo(() => {
-    if (!airports[currentNode] || tour.length < 2) return 0;
-    const currIdx = tour[currentNode];
-    // find next position in the tour (wrap around)
-    const nextTourPos = tour[(currentNode + 1) % tour.length];
-    const curr = airports[currIdx];
-    const next = airports[nextTourPos];
-    const dLat = next.lat  - curr.lat;
-    const dLng = next.long - curr.long;
-    // atan2(dx, dy) gives angle from north; convert to degrees
-    return (Math.atan2(dLng, dLat) * 180) / Math.PI;
-  }, [airports, tour, currentNode]);
+  // const planeHeading = useMemo(() => {
+  //   if (!airports[currentNode] || tour.length < 2) return 0;
+  //   const currIdx = tour[currentNode];
+  //   // find next position in the tour (wrap around)
+  //   const nextTourPos = tour[(currentNode + 1) % tour.length];
+  //   const curr = airports[currIdx];
+  //   const next = airports[nextTourPos];
+  //   const dLat = next.lat  - curr.lat;
+  //   const dLng = next.long - curr.long;
+  //   // atan2(dx, dy) gives angle from north; convert to degrees
+  //   return (Math.atan2(dLng, dLat) * 180) / Math.PI;
+  // }, [airports, tour, currentNode]);
 
   return (
     <GoogleMap
@@ -88,7 +88,7 @@ export default function RouteMap({
       {tour.map((airportIdx, tourPos) => {
         const { name, lat, long } = airports[airportIdx];
         // If this tour position is the current one, show plane
-        if (tourPos === currentNode) {
+        if (tourPos === currentStep) {
           return (
             <Marker
               key={`plane-${airportIdx}${tourPos}`}
@@ -98,7 +98,7 @@ export default function RouteMap({
                 scaledSize: new window.google.maps.Size(32, 32),
                 anchor: new window.google.maps.Point(16, 16),
                 // rotation is only supported on Symbol, but many browsers honor it here:
-                rotation: planeHeading,
+                //grotation: planeHeading,
               }}
             />
           );

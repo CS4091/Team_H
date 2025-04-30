@@ -80,6 +80,7 @@ export default function CreateRouteContent() {
               current_step: 0,
               tour: tourResult,
               airport_codes: airports.map(a => a.icao),
+              airport_names: airports.map(a => a.name),
               lat:             airports.map(a => a.lat),
               long:            airports.map(a => a.long),
               thumbnail_url: 'https://uwyipvggvvpkplyaonum.supabase.co/storage/v1/object/public/images//route_thumbnail_1745939673.0595698.png',
