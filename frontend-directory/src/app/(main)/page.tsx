@@ -1,51 +1,97 @@
+'use client';
+
+import { useRef } from 'react';
 import Image from 'next/image';
 import FlightIcon from '@mui/icons-material/Flight';
+import Button from '@/components/Button';
 import Features from "@/components/Features";
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
-export default function LandingPage() {
-    return (
-      <>
-      <section id="home" className="pt-16 pb-20">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2 mb-10 md:mb-0">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-4">
-                Find the Most Efficient Route for your Trip!
-              </h1>
-              <p className="text-lg text-gray-600 mb-8 max-w-md">
-                Make your life easier by finding the optimal route for your trip with our minimalist approach.
-              </p>
-              <div className="flex space-x-4">
-                <button className="bg-gray-900 text-white px-6 py-3 rounded-md hover:bg-gray-800 transition">
-                  <Link href="/sign-in">
-                    Get Started
-                  </Link>
-                </button>
-                <button className="border border-gray-300 text-gray-700 px-6 py-3 rounded-md hover:bg-gray-50 transition">
-                  <Link href="/about">
-                    Learn More
-                  </Link>
-                </button>
-              </div>
-            </div>
-            <div className="md:w-1/2">
-              <Image 
-                width={906}
-                height={512}
-                src="/PlaneOverCity.png" 
-                alt="A plane flying over a city" 
-                className="rounded-xl shadow-xl"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-      <div style={{overflow: "hidden", position: "absolute", width: "100%", height: "100%", top: 0, left: 0, zIndex: "-1"}}>
-        <FlightIcon style={{position: "absolute", animation: "glide1 7.5s ease-in-out infinite", rotate: "110deg",
-          left: "-70px", top: "80px", fontSize: "80px", opacity: "70%", zIndex: "-1" }} />
-      </div>
-      <Features />
-    </>
-    );
-}
+export default function Home() {
+	const containerRef = useRef<HTMLDivElement>(null);
+	
+	// Text animation variants
+	const textVariants = {
+		hidden: {
+			opacity: 0,
+			scale: 0.8,
+			filter: "blur(8px)",
+		},
+		visible: {
+			opacity: 1,
+			scale: 1,
+			filter: "blur(0px)",
+			transition: {
+				duration: 0.8,
+				ease: "easeOut",
+			}
+		}
+	};
+	
+	// Stagger the animations
+	const containerVariants = {
+		hidden: { opacity: 0 },
+		visible: {
+			opacity: 1,
+			transition: {
+				staggerChildren: 0.2
+			}
+		}
+	};
+
+	return (
+        <div>
+			<div className='flex h-screen justify-center items-center px-[100px] gap-[100px]'>
+				<div className='flex flex-row gap-[70px] w-full'> 
+					<motion.div 
+						className='flex flex-col justify-center gap-[30px]'
+						variants={containerVariants}
+						initial="hidden"
+						animate="visible"
+					>
+						<motion.h1 variants={textVariants}>
+							Find the Most Efficient Route for you Trip
+						</motion.h1>
+						
+						<motion.h5 variants={textVariants}>
+							Make your life easier by finding the optimal route for your trip with our minimalist approach
+						</motion.h5>
+						
+						<motion.div 
+							className='flex flex-row gap-[50px]'
+							variants={textVariants}
+						>
+							<button 
+                  className={`flex items-center justify-center shadow-lg  ${false ? 'bg-white text-black' : 'bg-black text-white'} rounded-[10px] py-[12px] px-[20px] ${false ? 'w-full' : 'w-fill'}`}
+                  
+              >
+                <p className='font-light'>
+                  Get Started
+                </p>
+              </button>
+							<button 
+                  className={`flex items-center justify-center bg-white outline outline-[1px] shadow-lg rounded-[10px] py-[12px] px-[20px] ${false ? 'w-full' : 'w-fill'}`}
+                  
+              >
+                <p className='font-light'>
+                 Learn More
+                </p>
+              </button>
+						</motion.div>
+					</motion.div>
+			</div>
+			<div className='w-full ml-[10px] mr-[-50px]' ref={containerRef}>
+                <Image 
+                    width={906}
+                    height={512}
+                    src="/PlaneOverCity.png" 
+                    alt="A plane flying over a city" 
+                    className="rounded-xl shadow-xl"
+                />
+			</div>
+		</div>
+        <Features/>
+    </div>
+	);
+};
