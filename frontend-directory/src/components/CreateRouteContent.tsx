@@ -67,7 +67,6 @@ export default function CreateRouteContent() {
 
           // 3) generateThumbnail
           const url = await genRouteThumbnail(airports);
-          console.log(url)
       
           // 3) Insert into Supabase using the solver’s output
           const { data, error } = await supabase
@@ -75,7 +74,7 @@ export default function CreateRouteContent() {
             .insert([{
               name,
               total_km: costResult,
-              km_covered: 0,
+              km_covered: json_data.cost,
               current_step: 0,
               tour: tourResult,
               airport_codes: airports.map(a => a.icao),

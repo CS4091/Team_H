@@ -7,7 +7,8 @@ interface SidePanelProps {
 export default function SidePanel({ currentPage }: SidePanelProps) {
     return (
         <nav className='h-full w-fill bg-[#f7f7fc] flex gap-[30px] pt-[20px] shadow-xl rounded-tr-3xl rounded-br-3xl'>
-            <div className='flex flex-col gap-[30px] px-[20px] justify-start items-center'>
+            <div className='flex flex-col gap-[30px] px-[20px] justify-between items-center'>
+                <div>
                 <div>
                     <svg width="40" height="40" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="Frame" clipPath="url(#clip0_146_1156)">
@@ -52,6 +53,24 @@ export default function SidePanel({ currentPage }: SidePanelProps) {
                         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="icon icon-tabler icons-tabler-outline icon-tabler-home"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
                         <h6>Analyze Algorithms</h6>
                     </a>
+                </div>
+                </div>
+                <div>
+                    <div className='flex flex-row justify-between items-center gap-[70px] w-full pb-[100px]'>
+                        <div className='flex flex-row justify-center items-center gap-[10px]'>
+                            <img
+                                src="/ayman.jpg"
+                                width={40}
+                                className='rounded-full'
+                            />
+                            <p>Ayman</p>
+                        </div>
+                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g id="Logout-Exit">
+                        <path id="Vector" d="M12.9052 12.8413H21.902M21.902 12.8413L19.4029 10.3422M21.902 12.8413L19.4029 15.3404M15.9041 9.34251V9.24254C15.9041 6.99351 15.9041 5.869 15.3314 5.08068C15.1464 4.82609 14.9225 4.6022 14.6679 4.41723C13.8796 3.84448 12.7551 3.84448 10.5061 3.84448H9.30651C7.05748 3.84448 5.93296 3.84448 5.14465 4.41723C4.89006 4.6022 4.66616 4.82609 4.48119 5.08068C3.90845 5.869 3.90845 6.99351 3.90845 9.24255V16.44C3.90845 18.689 3.90845 19.8135 4.48119 20.6018C4.66616 20.8564 4.89006 21.0803 5.14465 21.2653C5.93296 21.838 7.05748 21.838 9.30651 21.838H10.5061C12.7551 21.838 13.8796 21.838 14.6679 21.2653C14.9225 21.0803 15.1464 20.8564 15.3314 20.6018C15.9041 19.8135 15.9041 18.689 15.9041 16.44V16.34" stroke="black" stroke-opacity="0.8" stroke-width="1.49946" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+                        </svg>
+                    </div>
                 </div>
             </div>
         </nav>
