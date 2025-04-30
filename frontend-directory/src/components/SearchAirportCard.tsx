@@ -73,7 +73,7 @@ export default function SearchAirportCard({
     <Dialog onClose={onClose} open={open}>
       <div className="w-80 p-4 bg-white rounded shadow">
         <div className="mb-4">
-          <h3 className="text-lg font-medium text-gray-900">Search Airport by ICAO</h3>
+          <h5 className="font-medium text-gray-900">Search Airport by ICAO</h5>
           <p className="text-sm text-gray-500">Enter an ICAO code to find an airport</p>
         </div>
 

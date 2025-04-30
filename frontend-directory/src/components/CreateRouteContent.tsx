@@ -56,7 +56,7 @@ export default function CreateRouteContent() {
       
         try {
           // 1) Solve TSP
-		  console.log('GETTING HERE');
+		  console.log(airports);
           const result = await solveTsp(name, airports);
           const { json_data } = result;
           const tourResult = json_data.tour;
@@ -67,23 +67,24 @@ export default function CreateRouteContent() {
           setTotal_km(costResult);
 		
           // 3) generateThumbnail
-		  console.log('generating thumbnail...')
-          const url = await genRouteThumbnail(airports);
+		//   console.log('generating thumbnail...')
+        //   const url = await genRouteThumbnail(airports);
       
           // 3) Insert into Supabase using the solver’s output
           const { data, error } = await supabase
             .from('routes')
             .insert([{
               name,
-              total_km: costResult,
-              km_covered: json_data.cost,
+              total_km: Math.floor(costResult),
+              km_covered: 0,
               current_step: 0,
               tour: tourResult,
               airport_codes: airports.map(a => a.icao),
               lat:             airports.map(a => a.lat),
               long:            airports.map(a => a.long),
-              thumbnail_url: url
-            }])
+              thumbnail_url: 'https://uwyipvggvvpkplyaonum.supabase.co/storage/v1/object/public/images//route_thumbnail_1745939673.0595698.png',
+			  aircraft: 'Boeing 747-8'
+			}])
             .select()
             .single();
 			console.log(data);
