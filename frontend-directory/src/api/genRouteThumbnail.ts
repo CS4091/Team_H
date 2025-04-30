@@ -34,9 +34,9 @@ export async function genRouteThumbnail(
     maptype: 'roadmap',
     key:     MAPS_KEY,
     // draw the route
-    path:    `weight:4|color:0xff0000ff|enc:${encoded}`,
+    path:    `weight:4|color:0x711b4cff|enc:${encoded}`,
     // place a standard red marker at the first coordinate
-    markers: `color:red|${startLat},${startLng}`,
+    markers: `color:0xf198c6ff|${startLat},${startLng}`,
   });
 
   const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?${params}`;

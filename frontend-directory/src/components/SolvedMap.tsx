@@ -81,7 +81,7 @@ export default function RouteMap({
       {/* Draw the route line */}
       <Polyline
         path={pathCoords}
-        options={{ strokeColor: '#FF0000', strokeOpacity: 0.8, strokeWeight: 2 }}
+        options={{ strokeColor: '#711b4c', strokeOpacity: 0.8, strokeWeight: 2 }}
       />
 
       {/* Render each airport marker, swapping in the plane at currentNode */}
