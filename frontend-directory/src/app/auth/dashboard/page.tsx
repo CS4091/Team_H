@@ -140,6 +140,7 @@ export default function DashboardPage() {
                                 date={formatDate(route.created_at)}
                                 totalKilometers={route.total_km}
                                 currentNode={route.current_node}
+                                id={route.id}
                             />
                         </motion.div>
                     ))}

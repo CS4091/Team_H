@@ -11,6 +11,7 @@ interface RouteCardProps {
   aircraftName: string;
   totalKilometers: number;
   currentNode: number;
+  id: number;
 }
 
 export default function RouteCard({
@@ -19,7 +20,8 @@ export default function RouteCard({
   date,
   aircraftName,
   totalKilometers,
-  currentNode
+  currentNode,
+  id,
 }: RouteCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -39,7 +41,9 @@ export default function RouteCard({
   };
 //55, 132, 240, 0.5
   return (
-    <a href=''>
+    <a 
+        href={`/auth/route-display/${id}`}
+    >
         <motion.div
         ref={cardRef}
         className=" w-[400px] rounded-lg shadow-[5px_8px_10px_1px_rgba(55,132,240,0.25)]
