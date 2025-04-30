@@ -76,7 +76,7 @@ export default function CreateRouteContent() {
               name,
               total_km: costResult,
               km_covered: 0,
-              current_node: 0,
+              current_step: 0,
               tour: tourResult,
               airport_codes: airports.map(a => a.icao),
               lat:             airports.map(a => a.lat),

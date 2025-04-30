@@ -29,7 +29,7 @@ export default function RouteDisplayPage() {
     const [total_km, setTotal_km] = useState<number>(0);
     const [km_covered, setKm_covered] = useState<number>(0);
     const [aircraft, setAircraft] = useState<string>('');
-    const [currentNode, setCurrentNode] = useState<number>(0);
+    const [currentStep, setCurrentStep] = useState<number>(0);
     // const [airportCodes, setAirportCodes] = useState<string[]>([]);
     // const [lattitudes, setLattitudes] = useState<number[]>([]);
     // const [longitudes, setLongitudes] = useState<number[]>([]);
@@ -51,7 +51,7 @@ export default function RouteDisplayPage() {
                 setTotal_km(data.total_km);
                 setKm_covered(data.setKm_covered);
                 setAircraft(data.aircraft);
-                setCurrentNode(data.current_node);
+                setCurrentStep(data.current_step);
                 const zippedUpAirports: airportType[] = zipAirportData(
                     data.airport_codes, 
                     data.airport_codes,
@@ -69,11 +69,22 @@ export default function RouteDisplayPage() {
         mapRef.current = map;
     };
 
-    const handleNext = () => {
-        // update currentNode state
-        // update supabase row with currentNode + 1
-        
-    };
+    const handleNext = async () => {
+        if (tour.length === 0) return;
+        const nextStep = (currentStep + 1) % tour.length;
+        setCurrentStep(nextStep);
+      
+        const { data, error } = await supabase
+          .from('routes')
+          .update({ current_step: nextStep })
+          .eq('id', id);
+      
+        if (error) {
+          console.error('Failed to update current_node in DB:', error);
+          setCurrentStep(currentStep);
+        }
+        console.log(currentStep);
+     };
 
     // 3) Build onClicks: one per tour entry, plus loop‐back if needed
     const clickTargets = tour.slice(); 
@@ -94,20 +105,6 @@ export default function RouteDisplayPage() {
     return (
         <div className='relative h-full'>
             <div className='absolute flex flex-col gap-[200px] w-full h-full z-10 px-[50px] py-[50px] pointer-events-none'>
-                {/* <RouteDetails
-                    name={name}
-                    totalKm={total_km}
-                    kmCovered={km_covered}
-                    aircraft={aircraft}
-                />
-                <div className='w-full flex flex-col justify-end px-[100px]'>
-                    <div className='flex flex-row gap-[30px] justify-center items-center'>
-                        <TourPanel/>
-                        <button className='bg-white rounded-full p-[10px]'>
-                            <VscDebugContinue size={80}/>
-                        </button>
-                    </div>
-                </div> */}
                 <RouteDetails
                     name={name}
                     totalKm={total_km}
@@ -116,12 +113,15 @@ export default function RouteDisplayPage() {
                 />
                 <div className='flex flex-row gap-[30px] justify-center items-center pointer-events-auto'>
                     <TourPanel
-                        currentNode={currentNode}
+                        currentStep={currentStep}
                         tour={tour}
                         airports={airports}
                         onClicks={onClicks}
                     />
-                    <button className='bg-white rounded-full p-[10px]'>
+                    <button 
+                        className='bg-white rounded-full p-[10px]'
+                        onClick={handleNext}
+                    >
                         <VscDebugContinue size={80}/>
                     </button>
                 </div>
@@ -130,7 +130,7 @@ export default function RouteDisplayPage() {
                 <SolvedMap 
                     airports={airports}
                     tour={tour}
-                    currentNode={currentNode}
+                    currentNode={tour[currentStep]}
                     onMapLoad={handleMapLoad}
                 />
             } 

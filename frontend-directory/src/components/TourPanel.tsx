@@ -8,14 +8,14 @@ import { airportType } from '@/types';
 import React from 'react';
 
 interface TourPanelProps {
-  currentNode: number;
+  currentStep: number;
   tour: number[];                // e.g. [0,2,1,3]
   airports: airportType[];       // full list of airport objects
   onClicks: Array<() => void>;   // one handler per tour position
 }
 
 export default function TourPanel({
-  currentNode,
+  currentStep,
   tour,
   airports,
   onClicks,
@@ -26,14 +26,14 @@ export default function TourPanel({
     const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
   
     useEffect(() => {
-      if (cardRefs.current[currentNode]) {
-        cardRefs.current[currentNode]?.scrollIntoView({
+      if (cardRefs.current[currentStep]) {
+        cardRefs.current[currentStep]?.scrollIntoView({
           behavior: "smooth",
           block: "nearest",
           inline: "center",
         });
       }
-    }, [currentNode]);
+    }, [currentStep]);
   
     return (
       <div
@@ -43,7 +43,7 @@ export default function TourPanel({
         ref={ref}
       >
         <div className="flex gap-[150px] min-w-max relative">
-          {airports.map((airport, index) => (
+          {tour.map((node, index) => (
             <button
               key={index}
               ref={(el) => {
@@ -54,7 +54,7 @@ export default function TourPanel({
                 relative flex flex-col items-center justify-center w-[160px] h-[100px]
                 rounded-xl shadow-md text-s text-center 
                 ${
-                  index === currentNode
+                  index === currentStep
                     ? "bg-blue-200 font-semibold"
                     : "bg-blue-50"
                 }
@@ -64,13 +64,13 @@ export default function TourPanel({
                 {index + 1}
               </span> */}
               
-              <h4>{airport.icao}</h4>
-              <p className="text-gray-400 italic">{airport.name}</p>
+              <h4>{airports[node].icao}</h4>
+              <p className="text-gray-400 italic">{airports[node].name}</p>
             </button>
           ))}
           <div
             className="absolute z-10 top-[110px]"
-            style={{ left: `calc(${currentNode} * 310px + 42px)` }}
+            style={{ left: `calc(${currentStep} * 310px + 42px)` }}
           >
             <Image
               width={70}
@@ -83,14 +83,14 @@ export default function TourPanel({
         </div>
   
         <div className="ml-16 flex items-center min-w-max">
-          {airports.map((airport, index) => (
+          {tour.map((node, index) => (
             <React.Fragment key={index}>
               <span
                 className={`w-6 h-3 rounded-full mx-1
                   ${
-                    index < currentNode
+                    index < currentStep
                       ? "bg-gray-400"
-                      : index === currentNode
+                      : index === currentStep
                       ? "bg-[#6124eb]"
                       : "bg-gray-200"
                   }`}
@@ -98,7 +98,7 @@ export default function TourPanel({
               {index < airports.length - 1 && (
                 <span
                   className={`w-[270px] h-1 mx-1
-                    ${index < currentNode ? "bg-gray-400" : "bg-gray-200"}`}
+                    ${index < currentStep ? "bg-gray-400" : "bg-gray-200"}`}
                 />
               )}
             </React.Fragment>

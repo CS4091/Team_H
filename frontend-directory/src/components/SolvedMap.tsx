@@ -91,7 +91,7 @@ export default function RouteMap({
         if (tourPos === currentNode) {
           return (
             <Marker
-              key={`plane-${airportIdx}`}
+              key={`plane-${airportIdx}${tourPos}`}
               position={{ lat, lng: long }}
               icon={{
                 url: planeUrl,
@@ -123,7 +123,7 @@ export default function RouteMap({
         // all other nodes get the default airport icon
         return (
           <Marker
-            key={`node-${airportIdx}`}
+            key={`node-${airportIdx}${tourPos}`}
             position={{ lat, lng: long }}
             title={name}
             icon={{
