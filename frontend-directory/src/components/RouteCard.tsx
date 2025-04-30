@@ -58,7 +58,7 @@ export default function RouteCard({
         whileHover={{ scale: 1.03 }}
         transition={{ type: 'spring', stiffness: 200, damping: 20 }}
         >
-        <div className='flex flex-col h-full'>
+        <div className='flex flex-col h-[360px]'>
             <div className='p-4 flex justify-between'>
             <div>
                 <h6 className='font-bold'>{name}</h6>
