@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import SolvedMap from '@/components/SolvedMap';
 import RouteDetails from '@/components/RouteDetails';
 import TourPanel from '@/components/TourPanel';
@@ -64,11 +64,30 @@ export default function RouteDisplayPage() {
         fetchRoute();
     }, [])
 
+    const mapRef = useRef<google.maps.Map | null>(null);
+    const handleMapLoad = (map: google.maps.Map) => {
+        mapRef.current = map;
+    };
+
     const handleNext = () => {
         // update currentNode state
         // update supabase row with currentNode + 1
         
     };
+
+    // 3) Build onClicks: one per tour entry, plus loop‐back if needed
+    const clickTargets = tour.slice(); 
+    if (tour.length && tour[tour.length - 1] !== tour[0]) {
+        clickTargets.push(tour[0]);
+    }
+
+    const onClicks = clickTargets.map((airportIdx) => () => {
+        const pt = airports[airportIdx];
+        if (mapRef.current && pt) {
+        mapRef.current.panTo({ lat: pt.lat, lng: pt.long });
+        mapRef.current.setZoom(6);   // or whatever zoom level you like
+        }
+    });
 
     if (loadError) return <p>Error loading Google Maps</p>;
 
@@ -100,7 +119,7 @@ export default function RouteDisplayPage() {
                         currentNode={currentNode}
                         tour={tour}
                         airports={airports}
-                        onClicks={[]}
+                        onClicks={onClicks}
                     />
                     <button className='bg-white rounded-full p-[10px]'>
                         <VscDebugContinue size={80}/>
@@ -112,6 +131,7 @@ export default function RouteDisplayPage() {
                     airports={airports}
                     tour={tour}
                     currentNode={currentNode}
+                    onMapLoad={handleMapLoad}
                 />
             } 
         </div>

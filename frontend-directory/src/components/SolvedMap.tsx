@@ -11,17 +11,19 @@ type MapOptions = google.maps.MapOptions;
 
 
 
-interface RouteMapProps {
-  airports: airportType[];
-  tour: number[];
-  currentNode: number;
+interface SolvedMapProps {
+    airports: airportType[];
+    tour: number[];
+    currentNode: number;
+    onMapLoad: (map: google.maps.Map) => void;  // new!
 }
 
 export default function RouteMap({
   airports,
   tour,
   currentNode,
-}: RouteMapProps) {
+  onMapLoad,
+}: SolvedMapProps) {
   const mapRef = useRef<GoogleMap>();
   const center = useMemo<LatLngLiteral>(() => ({ lat: 43, lng: -80 }), []);
   const options = useMemo<MapOptions>(
@@ -39,9 +41,9 @@ export default function RouteMap({
 
   const onLoad = useCallback((map: google.maps.Map) => {
     mapRef.current = map;
-  }, []);
+    onMapLoad(map);               // tell the parent about it
+  }, [onMapLoad]);
 
-  
 
   // Build the polyline path from the tour indices
   const pathCoords = useMemo<LatLngLiteral[]>(() => {
