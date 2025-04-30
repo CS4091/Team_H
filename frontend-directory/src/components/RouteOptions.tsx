@@ -34,7 +34,13 @@ export default function RouteOptions({ onClick, isLoaded }: RouteOptionsProps) {
   };
 
   return (
-    <div className="bg-black rounded-lg w-fit px-[20px] h-full py-[20px] flex flex-col justify-start gap-[50px]">
+    <div 
+        className="bg-black rounded-lg w-fit px-[20px] h-full py-[20px] flex flex-col justify-start gap-[50px]"
+        style={{
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            backdropFilter: 'blur(8px)',
+        }}
+    >
       {/* Editable route name */}
       <input
         type="text"

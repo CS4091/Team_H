@@ -41,7 +41,7 @@ export default function TourPanel({
 
   return (
     <div
-      className="w-full rounded-lg border-2 border-solid  py-4 px-16 flex flex-col justify-center overflow-x-auto scrollbar-hide select-none gap-16 cursor-[grab]"
+      className="w-full rounded-2xl border-2 border-solid  py-4 px-16 flex flex-col justify-center overflow-x-auto scrollbar-hide select-none gap-16 cursor-[grab]"
       {...events}
       ref={ref}
       style={{
