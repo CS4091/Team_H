@@ -19,7 +19,7 @@ export default function RouteDetails({
 }: RouteDetailsProps) {
     return (
         <div 
-            className='bg-black rounded-lg w-fit w-min-[300px] px-[20px] h-full py-[20px] flex flex-col justify-start gap-[50px]'
+            className='bg-black rounded-lg w-fit w-min-[300px] px-[20px] h-fill py-[20px] flex flex-col justify-start gap-[50px]'
             style={{
                 backgroundColor: 'rgba(0,0,0,0.5)',
                 backdropFilter: 'blur(8px)',
@@ -27,9 +27,13 @@ export default function RouteDetails({
         >
             <div className='w-full flex flex-col gap-[10px]'>
                 <h5 className='text-white'>{name}</h5>
-                <div className='flex gap-1 items-center'>
+                <div className='flex gap-[10px] items-center'>
                     <IoAirplaneOutline size={24} />
                     <p className='text-sm text-white'>{aircraft}</p>
+                </div>
+                <div className='flex gap-[10px] items-center'>
+                    <MdModeOfTravel size={24} />
+                    <p className='text-sm text-white'>{`${totalKm} km`}</p>
                 </div>
             </div>
         </div>
