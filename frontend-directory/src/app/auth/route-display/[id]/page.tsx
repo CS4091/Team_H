@@ -143,7 +143,7 @@ export default function RouteDisplayPage() {
                                 justify-center
                             "
                             >
-                            <VscDebugContinue size={32} className="text-blue-600" />
+                            <VscDebugContinue size={32} className="text-[#711b4c]" />
                         </motion.button>
                     </div>
                 </div>

@@ -61,10 +61,10 @@ export default function TourPanel({
             className={`
               relative flex flex-col items-center justify-center w-[160px] h-[100px]
               rounded-xl shadow-md text-s text-center 
-              ${index === currentStep ? 'bg-blue-200 font-semibold' : 'bg-blue-50'}
+              ${index === currentStep ? 'bg-[#ffecf2] font-semibold' : 'bg-blue-50'}
             `}
           >
-            <h4>{airports[node].icao}</h4>
+            <h6>{airports[node].icao}</h6>
             <p className="text-gray-400 italic">{airports[node].name}</p>
           </button>
         ))}
@@ -102,7 +102,7 @@ export default function TourPanel({
                   index < currentStep
                     ? 'bg-gray-400'
                     : index === currentStep
-                    ? 'bg-[#6124eb]'
+                    ? 'bg-[#711b4c]'
                     : 'bg-gray-200'
                 }`}
             />
