@@ -26,9 +26,9 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
           <aside className="shrink-0 sticky top-0 h-full">
             <SidePanel currentPage={segment} />
           </aside>
-
-          {/* Scrollable main content */}
-          <main className="flex-1 overflow-y-auto">{children}</main>
+          <main className="flex-1 overflow-y-auto">
+            {children}
+          </main>
         </div>
       </div>
     </UserContextProvider>
