@@ -92,7 +92,7 @@ export default function CreateRouteContent() {
           }
       
           // 4) Navigate on success
-          router.push('/auth/dashboard');
+          router.push(`/auth/route-display/${data.id}`);
         } catch (err) {
           console.error('Error in route generation flow:', err);
         } finally {

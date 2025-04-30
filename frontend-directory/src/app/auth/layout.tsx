@@ -17,9 +17,9 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
     <UserContextProvider>
       <div className="flex flex-col h-screen overflow-hidden">
         {/* Fixed header */}
-        <header className="shrink-0">
+        {/* <header className="shrink-0">
           <AuthHeader />
-        </header>
+        </header> */}
 
         <div className="flex flex-1 overflow-hidden">
           {/* Sticky side panel */}
