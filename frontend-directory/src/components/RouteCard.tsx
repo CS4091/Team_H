@@ -46,7 +46,7 @@ export default function RouteCard({
     >
         <motion.div
         ref={cardRef}
-        className=" w-[400px] rounded-lg shadow-[5px_8px_10px_1px_rgba(55,132,240,0.25)]
+        className=" w-[400px] rounded-lg shadow-[5px_8px_10px_1px_rgba(113,27,76,0.25)]
  bg-white overflow-hidden"
         style={{ 
             perspective: 800,
