@@ -11,6 +11,7 @@ import supabase from '@/api/supabaseClient';
 import { airportType } from '@/types';
 import { allAirports} from '@/constants/airports';
 import { useJsApiLoader } from '@react-google-maps/api';
+import { solveTsp } from '@/api/solveTsp';
 
 const selectedAirports: airportType[] = [
     { name: "Camp Bastion Air Base",            icao: "OAZI", lat: 31.8638, long: 64.2246 },
@@ -53,12 +54,45 @@ export default function CreateRouteContent() {
         setLoading(true);
         // first call algorothm endpoint to get list of solved 
         // once solved and rerreturned, set the path order
-        setTour([0, 1, 2, 0]);
+        const solve = async() => {
+            try {
+                // Pass your route name and the full airportType[] array
+                const result = await solveTsp(name, airports);
+          
+                // The backend returns:
+                // {
+                //   image_data: string,
+                //   json_data: {
+                //     tour: number[],
+                //     cost: number,
+                //     tour_length: number,
+                //     is_cycle: boolean
+                //   }
+                // }
+                const { image_data, json_data } = result;
+                setTour(json_data.tour);
+                setTotal_km(json_data.cost);
+                console.log('Total cost:', json_data.cost);
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+
 
         const generateRoute = async () => {
             const { data, error} = await supabase
                 .from('routes')
-                .insert([])
+                .insert([{
+                    name: name,
+                    total_km: total_km,
+                    km_covered: 0,
+                    current_node: 0,
+                    tour: tour,
+                    airport_codes: airports.map(a => a.icao),
+                    lat: airports.map(a => a.lat),
+                    long:  airports.map(a => a.long),
+                }])
                 .select()
                 .single();
             
