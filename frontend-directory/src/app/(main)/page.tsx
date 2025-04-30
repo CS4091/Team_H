@@ -62,22 +62,22 @@ export default function Home() {
 							className='flex flex-row gap-[50px]'
 							variants={textVariants}
 						>
-							<button 
+			  <a 
                   className={`flex items-center justify-center shadow-lg  ${false ? 'bg-white text-black' : 'bg-black text-white'} rounded-[10px] py-[12px] px-[20px] ${false ? 'w-full' : 'w-fill'}`}
-                  
+                  href='/sign-in'
               >
                 <p className='font-light'>
                   Get Started
                 </p>
-              </button>
-							<button 
-                  className={`flex items-center justify-center bg-white outline outline-[1px] shadow-lg rounded-[10px] py-[12px] px-[20px] ${false ? 'w-full' : 'w-fill'}`}
-                  
+              </a>
+							<a 
+                  className={`flex items-center justify-center bg-white outline outline-gray-400 outline-[1px] shadow-lg rounded-[10px] py-[12px] px-[20px] ${false ? 'w-full' : 'w-fill'}`}
+                  href='/about'
               >
                 <p className='font-light'>
                  Learn More
                 </p>
-              </button>
+              </a>
 						</motion.div>
 					</motion.div>
 			</div>
