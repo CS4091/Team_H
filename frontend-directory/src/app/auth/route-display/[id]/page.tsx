@@ -10,6 +10,7 @@ import { useParams } from "next/navigation";
 import supabase from '@/api/supabaseClient';
 import { airportType } from '@/types';
 import { VscDebugContinue } from "react-icons/vsc";
+import { motion } from 'framer-motion';
 
 interface RouteDisplayProps {
 
@@ -35,8 +36,10 @@ export default function RouteDisplayPage() {
     // const [longitudes, setLongitudes] = useState<number[]>([]);
     const [airports, setAirports] = useState<airportType[]>([]);
 
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
+        setLoading(true);
         const fetchRoute = async () => {
             const { data, error } = await supabase
                 .from('routes')
@@ -45,6 +48,7 @@ export default function RouteDisplayPage() {
                 .single();
             if (error) {
                 console.error(error);
+                setLoading(false);
             } else {
                 setTour(data.tour);
                 setName(data.name);
@@ -62,6 +66,7 @@ export default function RouteDisplayPage() {
             }
         };
         fetchRoute();
+        setLoading(false);
     }, [])
 
     const mapRef = useRef<google.maps.Map | null>(null);
@@ -104,28 +109,44 @@ export default function RouteDisplayPage() {
 
     return (
         <div className='relative h-full'>
-            <div className='absolute flex flex-col justify-between gap-[200px] w-full h-full z-10 px-[50px] py-[50px] pointer-events-none'>
-                <RouteDetails
-                    name={name}
-                    totalKm={total_km}
-                    kmCovered={km_covered}
-                    aircraft={aircraft}
-                />
-                <div className='flex flex-row gap-[30px] justify-center items-center pointer-events-auto'>
-                    <TourPanel
-                        currentStep={currentStep}
-                        tour={tour}
-                        airports={airports}
-                        onClicks={onClicks}
+            {!loading && (
+                <div className='absolute flex flex-col justify-between gap-[200px] w-full h-full z-10 px-[50px] py-[50px] pointer-events-none'>
+                    <RouteDetails
+                        name={name}
+                        totalKm={total_km}
+                        kmCovered={km_covered}
+                        aircraft={aircraft}
                     />
-                    <button 
-                        className='bg-white rounded-full p-[10px]'
-                        onClick={handleNext}
-                    >
-                        <VscDebugContinue size={80}/>
-                    </button>
+                    <div className='flex flex-row gap-[30px] justify-center items-center pointer-events-auto'>
+                        <TourPanel
+                            currentStep={currentStep}
+                            tour={tour}
+                            airports={airports}
+                            onClicks={onClicks}
+                        />
+                        <motion.button
+                            onClick={handleNext}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="
+                                bg-white 
+                                rounded-full 
+                                p-3 
+                                shadow-md 
+                                hover:bg-gray-100 
+                                active:bg-gray-200 
+                                transition-colors 
+                                duration-200 
+                                flex 
+                                items-center 
+                                justify-center
+                            "
+                            >
+                            <VscDebugContinue size={32} className="text-blue-600" />
+                            </motion.button>
+                    </div>
                 </div>
-            </div>
+            )}
             {isLoaded && 
                 <SolvedMap 
                     airports={airports}

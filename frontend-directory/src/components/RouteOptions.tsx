@@ -9,9 +9,10 @@ import { airportType } from '@/types';
 interface RouteOptionsProps {
   onClick: () => void;
   isLoaded: boolean;
+  loading: boolean;
 }
 
-export default function RouteOptions({ onClick, isLoaded }: RouteOptionsProps) {
+export default function RouteOptions({ onClick, isLoaded, loading }: RouteOptionsProps) {
   const { name, setName, airports, setAirports } = useContext(RouteContext);
 
   // track the ICAO of the start airport (first in list)
@@ -35,9 +36,9 @@ export default function RouteOptions({ onClick, isLoaded }: RouteOptionsProps) {
 
   return (
     <div 
-        className="bg-black rounded-lg w-fit px-[20px] h-full py-[20px] flex flex-col justify-start gap-[50px]"
+        className="bg-black rounded-lg w-[250px] px-[20px] h-full py-[20px] flex flex-col justify-start gap-[50px]"
         style={{
-            backgroundColor: 'rgba(0,0,0,0.5)',
+            backgroundColor: 'rgba(255,255,255,0.5)',
             backdropFilter: 'blur(8px)',
         }}
     >
@@ -47,9 +48,10 @@ export default function RouteOptions({ onClick, isLoaded }: RouteOptionsProps) {
         value={name}
         onChange={(e) => setName(e.target.value)}
         className="
-          bg-black text-white font-bold text-lg
+           text-black font-bold text-lg
           border-none outline-none focus:ring-0
         "
+
       />
 
       {/* Add Airport Button + Search Dialog */}
@@ -66,16 +68,16 @@ export default function RouteOptions({ onClick, isLoaded }: RouteOptionsProps) {
       />
 
       {/* Scrollable airport list with radio to pick start */}
-      <div className="h-48 overflow-y-auto bg-gray-800 rounded p-2">
+      <div className="h-[500px] overflow-y-auto  rounded p-2">
         {airports.length === 0 ? (
           <p className="text-gray-400">No airports added</p>
         ) : (
-          airports.map((airport) => (
+          airports.map((airport, index) => (
             <label
-              key={airport.icao}
+              key={index}
               className="
                 flex items-center text-white py-1
-                border-b border-gray-700 last:border-b-0
+                border-b border-gray-300 last:border-b-0
                 cursor-pointer
               "
             >
@@ -87,19 +89,21 @@ export default function RouteOptions({ onClick, isLoaded }: RouteOptionsProps) {
                 onChange={() => handleStartChange(airport.icao)}
                 className="mr-2"
               />
-              {`${airport.icao} - ${airport.name}`}
+                <p className='text-gray-700'>{`${airport.icao} - ${airport.name}`}</p>
             </label>
           ))
         )}
       </div>
 
-      {/* Generate route */}
-      <Button
-        text="Generate route"
-        onClick={onClick}
-        fillContainer={true}
-        invert={true}
-      />
+        {/* Generate route */}
+      
+        <button 
+            className={`flex items-center justify-center bg-${loading ? 'gray-400' : '[#6124eb]'} text-white rounded-[8px] py-[4px] px-[8px] ${true ? 'w-full' : 'w-fill'} ${loading ? 'cursor-not-allowed opacity-70' : 'hover:bg-[#5012d6]'}`}
+            onClick={onClick}
+            disabled={loading}
+        >
+            {loading ? "Generating..." : "Generate Route"}
+        </button>
     </div>
   );
 }

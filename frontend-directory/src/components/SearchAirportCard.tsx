@@ -19,58 +19,43 @@ export default function SearchAirportCard({
 }: SearchAirportCardProps) {
   const { airports, setAirports } = useContext(RouteContext);
   const [searchTerm, setSearchTerm] = useState('');
-  const [predictions, setPredictions] = useState<
-    google.maps.places.AutocompletePrediction[]
-  >([]);
-  const [selectedAirport, setSelectedAirport] =
-    useState<airportType | null>(null);
+  const [filteredAirports, setFilteredAirports] = useState<airportType[]>([]);
+  const [selectedAirport, setSelectedAirport] = useState<airportType | null>(null);
 
+  // Process allAirports to ensure they match our type and have valid values
+  const processedAirports = React.useMemo(() => {
+    return allAirports
+      .filter(airport => airport && airport.icao && airport.icao.trim() !== "") // Filter out any entries with empty ICAO codes
+      .map(airport => ({
+        name: airport.airport || "Unknown Airport",
+        icao: airport.icao,
+        lat: typeof airport.latitude === 'string' ? parseFloat(airport.latitude) : airport.latitude || 0,
+        long: typeof airport.longitude === 'string' ? parseFloat(airport.longitude) : airport.longitude || 0,
+      }));
+  }, []);
+
+  // Filter airports based on search term (focus on ICAO code)
   useEffect(() => {
-    if (!isLoaded || !searchTerm) {
-      setPredictions([]);
+    if (!searchTerm) {
+      setFilteredAirports([]);
       return;
     }
-    const svc = new window.google.maps.places.AutocompleteService();
-    svc.getPlacePredictions(
-      { input: searchTerm, types: ['airport'] },
-      (preds, status) => {
-        if (
-          status ===
-            window.google.maps.places.PlacesServiceStatus.OK &&
-          preds
-        ) {
-          setPredictions(preds);
-        } else {
-          setPredictions([]);
-        }
-      }
-    );
-  }, [searchTerm, isLoaded]);
+    
+    const upperSearchTerm = searchTerm.toUpperCase();
+    const results = processedAirports
+      .filter(airport => 
+        airport.icao.includes(upperSearchTerm) || 
+        airport.name.toUpperCase().includes(upperSearchTerm)
+      )
+      .slice(0, 10); // Limit to 10 results for performance
+    
+    setFilteredAirports(results);
+  }, [searchTerm, processedAirports]);
 
-  const handleSelect = (
-    p: google.maps.places.AutocompletePrediction
-  ) => {
-    const desc = p.description || p.structured_formatting.main_text;
-    const matchRaw = allAirports.find(
-      (a) =>
-        a.airport.toLowerCase() === desc.toLowerCase() ||
-        desc.toLowerCase().includes(a.airport.toLowerCase())
-    );
-    if (matchRaw) {
-      const mapped: airportType = {
-        name: matchRaw.airport,
-        icao: matchRaw.icao,
-        lat: typeof matchRaw.latitude === 'string'
-          ? parseFloat(matchRaw.latitude)
-          : matchRaw.latitude,
-        long: typeof matchRaw.longitude === 'string'
-          ? parseFloat(matchRaw.longitude)
-          : matchRaw.longitude,
-      };
-      setSelectedAirport(mapped);
-    }
+  const handleSelect = (airport: airportType) => {
+    setSelectedAirport(airport);
     setSearchTerm('');
-    setPredictions([]);
+    setFilteredAirports([]);
   };
 
   const handleAddAirport = () => {
@@ -86,58 +71,78 @@ export default function SearchAirportCard({
 
   return (
     <Dialog onClose={onClose} open={open}>
-      <div className="w-80 p-4 bg-gray-800 rounded">
-        {!isLoaded ? (
-          <p className="text-white">Loading autocomplete…</p>
-        ) : (
-          <>
-            <input
-              type="text"
-              autoFocus
-              placeholder="Search airport by name…"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="
-                w-full mb-2
-                bg-gray-700 text-white
-                rounded px-3 py-2
-                border-none outline-none focus:ring-0
-              "
-            />
+      <div className="w-80 p-4 bg-white rounded shadow">
+        <div className="mb-4">
+          <h3 className="text-lg font-medium text-gray-900">Search Airport by ICAO</h3>
+          <p className="text-sm text-gray-500">Enter an ICAO code to find an airport</p>
+        </div>
 
-            <div className="max-h-60 overflow-y-auto">
-              {predictions.length === 0 ? (
-                <p className="text-gray-400">No results</p>
-              ) : (
-                predictions.map((p) => (
-                  <div
-                    key={p.place_id}
-                    onClick={() => handleSelect(p)}
-                    className="
-                      px-3 py-2 text-white
-                      hover:bg-gray-700 cursor-pointer
-                    "
-                  >
-                    {p.description}
-                  </div>
-                ))
-              )}
-            </div>
+        <input
+          type="text"
+          autoFocus
+          placeholder="Search by ICAO code or airport name..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="
+            w-full mb-2
+            bg-white text-gray-900
+            border border-gray-300
+            rounded px-3 py-2
+            outline-none focus:ring-2 focus:ring-blue-400
+          "
+        />
 
-            {selectedAirport && (
-              <div className="mt-4 p-2 bg-gray-700 rounded text-white flex justify-between items-center">
-                <span>
-                  <strong>Selected:</strong> {selectedAirport.name} ({selectedAirport.icao})
-                </span>
-                <button
-                  onClick={handleAddAirport}
-                  className="ml-2 bg-blue-600 hover:bg-blue-500 text-white py-1 px-2 rounded"
+        <div className="max-h-60 overflow-y-auto bg-white border border-gray-200 rounded">
+          {filteredAirports.length === 0 ? (
+            <p className="p-2 text-gray-500">
+              {searchTerm ? "No matching airports found" : "Enter an ICAO code"}
+            </p>
+          ) : (
+            filteredAirports.map((airport) => {
+              // Ensure we have a valid, non-empty key
+              const itemKey = airport.icao || `airport-${airport.name}-${airport.lat}-${airport.long}`;
+              return (
+                <div
+                  key={itemKey}
+                  onClick={() => handleSelect(airport)}
+                  className="
+                    px-3 py-2 text-gray-900
+                    hover:bg-gray-100 cursor-pointer
+                    flex justify-between
+                  "
                 >
-                  Add
-                </button>
+                  <span className="font-medium">{airport.icao || "N/A"}</span>
+                  <span className="text-gray-600">{airport.name}</span>
+                </div>
+              );
+            })
+          )}
+        </div>
+
+        {selectedAirport && (
+          <div className="mt-4 p-2 bg-gray-100 rounded border border-gray-200">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-gray-900 font-medium">
+                {selectedAirport.icao}
+              </span>
+              <button
+                onClick={handleAddAirport}
+                className="
+                  bg-blue-600 hover:bg-blue-500
+                  text-white py-1 px-3 rounded
+                  transition-colors duration-150
+                "
+              >
+                Add
+              </button>
+            </div>
+            <div className="text-sm text-gray-700">
+              <div>{selectedAirport.name}</div>
+              <div className="text-xs text-gray-500">
+                Lat: {selectedAirport.lat.toFixed(4)} | Long: {selectedAirport.long.toFixed(4)}
               </div>
-            )}
-          </>
+            </div>
+          </div>
         )}
       </div>
     </Dialog>

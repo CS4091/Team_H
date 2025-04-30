@@ -56,6 +56,7 @@ export default function CreateRouteContent() {
       
         try {
           // 1) Solve TSP
+		  console.log('GETTING HERE');
           const result = await solveTsp(name, airports);
           const { json_data } = result;
           const tourResult = json_data.tour;
@@ -64,8 +65,9 @@ export default function CreateRouteContent() {
           // 2) Update local UI state
           setTour(tourResult);
           setTotal_km(costResult);
-
+		
           // 3) generateThumbnail
+		  console.log('generating thumbnail...')
           const url = await genRouteThumbnail(airports);
       
           // 3) Insert into Supabase using the solver’s output
@@ -84,12 +86,13 @@ export default function CreateRouteContent() {
             }])
             .select()
             .single();
-      
+			console.log(data);
           if (error) {
             console.error('Insert failed:', error);
+			setLoading(false);
             throw error;
           }
-      
+		  
           // 4) Navigate on success
           router.push(`/auth/route-display/${data.id}`);
         } catch (err) {
@@ -104,8 +107,8 @@ export default function CreateRouteContent() {
 
     return (
         <div className='relative h-full'>
-            <div className='absolute h-full z-10 pl-[50px] py-[50px]'>
-            <RouteOptions onClick={handleGenerateRoute} isLoaded={isLoaded}/> 
+            <div className='absolute h-full z-10 pl-[70px] py-[50px]'>
+            <RouteOptions onClick={handleGenerateRoute} isLoaded={isLoaded} loading={loading}/> 
             </div>
             {/* <div className='absolute h-fill justify-end z-10 px-[200px] '>
                 <ChipBar/>
