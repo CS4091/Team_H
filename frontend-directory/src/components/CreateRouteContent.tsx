@@ -12,7 +12,7 @@ import { airportType } from '@/types';
 import { allAirports} from '@/constants/airports';
 import { useJsApiLoader } from '@react-google-maps/api';
 import { solveTsp } from '@/api/solveTsp';
-import { genRouteThumbnail } from '@/api/generateThumbnail';
+import { genRouteThumbnail } from '@/api/genRouteThumbnail';
 
 const selectedAirports: airportType[] = [
     { name: "Camp Bastion Air Base",            icao: "OAZI", lat: 31.8638, long: 64.2246 },
@@ -66,7 +66,7 @@ export default function CreateRouteContent() {
           setTotal_km(costResult);
 
           // 3) generateThumbnail
-          const url = await generateThumbnail(airports);
+          const url = await genRouteThumbnail(airports);
           console.log(url)
       
           // 3) Insert into Supabase using the solver’s output
