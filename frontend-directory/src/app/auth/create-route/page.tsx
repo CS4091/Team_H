@@ -10,13 +10,7 @@ import { useRouter } from 'next/navigation';
 import supabase from '@/api/supabaseClient';
 import { airportType } from '@/types';
 import airports from '@/constants/airports';
-
-// no SSR
-/*
-const DynamicMap = dynamic(
-    () => import("@/components/RouteMap").then((mod) => mod.GoogleMapClient),
-    { ssr: false }
-);*/
+import { useJsApiLoader } from '@react-google-maps/api';
 
 const selectedAirports: airportType[] = [
     { name: "Camp Bastion Air Base",            icao: "OAZI", lat: 31.8638, long: 64.2246 },
@@ -37,8 +31,13 @@ const selectedAirports: airportType[] = [
   
 
 export default function CreateRoutePage() {
-    const router = useRouter();
+    const { isLoaded, loadError } = useJsApiLoader({
+        googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
+        libraries: ['places'],               // for autocomplete
+        mapIds: ['ce7c5f352b0bc4fa'],        // for map styling
+    });    
 
+    const router = useRouter();
     const [name, setName] = useState<string>('Example Route');
     const [total_km, setTotal_km] = useState<number>(0);
     const [km_covered, setKm_covered] = useState<number>(0);
@@ -72,17 +71,20 @@ export default function CreateRoutePage() {
         setLoading(false);
     }
 
+    if (loadError) return <p>Error loading Google Maps</p>;
+
     return (
         <RouteProvider>
             <div className='relative h-full'>
                 <div className='absolute h-full z-10 pl-[50px] py-[50px]'>
-                <RouteOptions onClick={handleGenerateRoute}/> 
+                <RouteOptions onClick={handleGenerateRoute} isLoaded={isLoaded}/> 
                 </div>
                 {/* <div className='absolute h-fill justify-end z-10 px-[200px] '>
                     <ChipBar/>
                 </div> */}
                 {/* <DynamicMap/> */}
-                <RouteMap airports={selectedAirports}/>
+                {/* Only render map once loaded */}
+                {isLoaded && <RouteMap airports={airports} />}
             </div>
         </RouteProvider>
     );

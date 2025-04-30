@@ -1,4 +1,4 @@
-[
+export const allAirports = [
     {
       "country_code": "AE",
       "region_name": "Abu Zaby",
@@ -82421,4 +82421,4 @@
       "latitude": -19.4364,
       "longitude": 29.8619
     }
-  ]
+  ];

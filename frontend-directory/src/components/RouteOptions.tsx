@@ -2,13 +2,17 @@
 
 import { useState, useContext } from 'react';
 import Button from './Button';
+import SearchAirportCard from './SearchAirportCard';
 import { RouteContext } from '@/contexts/RouteOptionsContext';
 import { airportType } from '@/types';
+import { allAirports } from '@/constants/airports';
 
 interface RouteOptionsProps {
     onClick: () => void;
+    isLoaded: boolean;
 }
 
+/*
 const selectedAirports: airportType[] = [
     { name: "Camp Bastion Air Base",            icao: "OAZI", lat: 31.8638, long: 64.2246 },
     { name: "Herat International Airport",      icao: "OAHR", lat: 34.21,   long: 62.2283 },
@@ -24,11 +28,12 @@ const selectedAirports: airportType[] = [
     { name: "Kunduz Airport",                   icao: "OAUZ", lat: 36.6651, long: 68.9108 },
     { name: "Forward Operating Base Shank",     icao: "OASH", lat: 33.9225, long: 69.0772 },
     { name: "Jalalabad Airport",                icao: "OAJL", lat: 34.3998, long: 70.4986 },
-  ];
+  ];*/
   
 
 export default function RouteOptions({ 
-    onClick 
+    onClick,
+    isLoaded
 }: RouteOptionsProps) {
     const { 
         name, setName, 
@@ -37,8 +42,23 @@ export default function RouteOptions({
 
     // by icao code
     const [startAirport, setStartAirport] = useState<string>(
-        selectedAirports[0]?.icao ?? ''
+        airports[0]?.icao ?? ''
       );
+    
+    const [searchOpen, setSearchOpen] = useState<boolean>(false);
+      // filter against ICAO, name, or region_name if present
+    //   const results = allAirports.filter(a =>
+    //     a.icao.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    //     a.airport.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    //     (a.region_name?.toLowerCase().includes(searchTerm.toLowerCase()))
+    //   );
+    
+    //   const handleAdd = (a: airportType) => {
+    //     // only add if its ICAO isn’t already in the list
+    //     if (!airports.some(ap => ap.icao === a.icao)) {
+    //       setAirports([...airports, a]);
+    //     }
+    //   };
 
     return (
         <div className='bg-black rounded-lg w-fit px-[20px] h-full py-[20px] flex flex-col justify-start gap-[50px]'>
@@ -56,11 +76,22 @@ export default function RouteOptions({
                 focus:ring-0
                 "
             />
-            <div className="h-48 overflow-y-auto bg-gray-800 rounded p-2">
-        {selectedAirports.length === 0 ? (
+        <Button
+            text="Add airport"
+            onClick={() => {setSearchOpen(true)}}
+            fillContainer={true}
+            invert={true}
+        />
+        <SearchAirportCard 
+            open={searchOpen} 
+            onClose={() => {setSearchOpen(false)}}
+            isLoaded={isLoaded}
+        />
+        <div className="h-48 overflow-y-auto bg-gray-800 rounded p-2">
+        {airports.length === 0 ? (
           <p className="text-gray-400">No airports added</p>
         ) : (
-          selectedAirports.map((airport, idx) => (
+          airports.map((airport, idx) => (
             <label
               key={airport.icao}
               className="
