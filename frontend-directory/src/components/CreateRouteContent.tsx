@@ -12,6 +12,7 @@ import { airportType } from '@/types';
 import { allAirports} from '@/constants/airports';
 import { useJsApiLoader } from '@react-google-maps/api';
 import { solveTsp } from '@/api/solveTsp';
+//import { genRouteThumbnail } from '@/api/genRouteThumbnail';
 import { genRouteThumbnail } from '@/api/genRouteThumbnail';
 
 const selectedAirports: airportType[] = [
@@ -70,6 +71,8 @@ export default function CreateRouteContent() {
 		//   console.log('generating thumbnail...')
         //   const url = await genRouteThumbnail(airports);
       
+          const thumbnailUrl = await genRouteThumbnail(airports.map(a => a.lat), airports.map(a => a.long));
+
           // 3) Insert into Supabase using the solver’s output
           const { data, error } = await supabase
             .from('routes')
@@ -83,7 +86,7 @@ export default function CreateRouteContent() {
               airport_names: airports.map(a => a.name),
               lat:             airports.map(a => a.lat),
               long:            airports.map(a => a.long),
-              thumbnail_url: 'https://uwyipvggvvpkplyaonum.supabase.co/storage/v1/object/public/images//route_thumbnail_1745939673.0595698.png',
+              thumbnail_url: thumbnailUrl,
 			  aircraft: 'Boeing 747-8'
 			}])
             .select()

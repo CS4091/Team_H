@@ -8,6 +8,7 @@ import { zipAirportData } from '@/utils';
 import { useJsApiLoader } from "@react-google-maps/api";
 import { useParams } from "next/navigation";
 import supabase from '@/api/supabaseClient';
+
 import { airportType } from '@/types';
 import { VscDebugContinue } from "react-icons/vsc";
 import { motion } from 'framer-motion';
@@ -143,7 +144,7 @@ export default function RouteDisplayPage() {
                             "
                             >
                             <VscDebugContinue size={32} className="text-blue-600" />
-                            </motion.button>
+                        </motion.button>
                     </div>
                 </div>
             )}
