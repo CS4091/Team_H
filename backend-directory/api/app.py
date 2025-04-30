@@ -158,7 +158,7 @@ async def solve_tsp(lat: List[float] = Body(...), long: List[float] = Body(...))
         ant_tour, ant_cost = ant_colony.run_aco(file_path="real_world.csv",alpha=0.1, beta=0.05, evaporation_rate=0.1, iterations=250, num_ants=250)
         ant_tour = [int(x) for x in ant_tour]
 
-        print(f"Algorithm used: {"Christofides" if chris_cost < ant_cost else "Ant Colony optimization"}")
+        print(f"Algorithm used: {'Christofides' if chris_cost < ant_cost else 'Ant Colony optimization'}")
 
         tour = chris_tour[0] if chris_cost < ant_cost else ant_tour
         cost = chris_cost if chris_cost < ant_cost else ant_cost
