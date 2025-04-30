@@ -50,61 +50,50 @@ export default function CreateRouteContent() {
     const [loading, setLoading] = useState<boolean>(false);
     
 
-    const handleGenerateRoute = () => {
+    const handleGenerateRoute = async () => {
         setLoading(true);
-        // first call algorothm endpoint to get list of solved 
-        // once solved and rerreturned, set the path order
-        const solve = async() => {
-            try {
-                // Pass your route name and the full airportType[] array
-                const result = await solveTsp(name, airports);
-          
-                // The backend returns:
-                // {
-                //   image_data: string,
-                //   json_data: {
-                //     tour: number[],
-                //     cost: number,
-                //     tour_length: number,
-                //     is_cycle: boolean
-                //   }
-                // }
-                const { image_data, json_data } = result;
-                setTour(json_data.tour);
-                setTotal_km(json_data.cost);
-                console.log('Total cost:', json_data.cost);
-            }
-            catch (error) {
-                console.log(error);
-            }
+      
+        try {
+          // 1) Solve TSP
+          const result = await solveTsp(name, airports);
+          const { json_data } = result;
+          const tourResult = json_data.tour;
+          const costResult = json_data.cost;
+      
+          // 2) Update local UI state
+          setTour(tourResult);
+          setTotal_km(costResult);
+      
+          // 3) Insert into Supabase using the solver’s output
+          const { data, error } = await supabase
+            .from('routes')
+            .insert([{
+              name,
+              total_km: costResult,
+              km_covered: 0,
+              current_node: 0,
+              tour: tourResult,
+              airport_codes: airports.map(a => a.icao),
+              lat:             airports.map(a => a.lat),
+              long:            airports.map(a => a.long),
+            }])
+            .select()
+            .single();
+      
+          if (error) {
+            console.error('Insert failed:', error);
+            throw error;
+          }
+      
+          // 4) Navigate on success
+          router.push('/auth/dashboard');
+        } catch (err) {
+          console.error('Error in route generation flow:', err);
+        } finally {
+          setLoading(false);
         }
-
-
-        const generateRoute = async () => {
-            const { data, error} = await supabase
-                .from('routes')
-                .insert([{
-                    name: name,
-                    total_km: total_km,
-                    km_covered: 0,
-                    current_node: 0,
-                    tour: tour,
-                    airport_codes: airports.map(a => a.icao),
-                    lat: airports.map(a => a.lat),
-                    long:  airports.map(a => a.long),
-                }])
-                .select()
-                .single();
-            
-                if (error) {
-                    console.log(error);
-                } 
-        }
-
-        generateRoute();
-        router.push('/auth/dashboard');
-        setLoading(false);
-    }
+      };
+      
 
     if (loadError) return <p>Error loading Google Maps</p>;
 

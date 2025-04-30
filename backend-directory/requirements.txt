@@ -1,21 +1,21 @@
 # Core dependencies
-numpy==1.26.4
-networkx==3.2.1
-matplotlib==3.8.3
-pandas==2.2.3
-karney==1.0.10
-polyline==2.0.2
-supabase==2.15.1
+numpy
+networkx
+matplotlib
+pandas
+karney
+polyline
+supabase
 
 # FastAPI
-fastapi==0.109.2
-uvicorn==0.27.1
-python-multipart==0.0.7  # For file uploads
+fastapi
+uvicorn
+python-multipart
 
 # Python utilities
 six
 typing-extensions
-python-dateutil==2.9.0.post0
-pillow==10.2.0  # For image processing
-python-dotenv==1.1.0
-Requests==2.32.3
+python-dateutil
+pillow
+python-dotenv
+Requests

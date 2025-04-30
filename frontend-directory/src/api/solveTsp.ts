@@ -25,9 +25,11 @@ export const solveTsp = async (
   try {
     const lat = airports.map((a) => a.lat);
     const long = airports.map((a) => a.long);
+    console.log(lat);
+    console.log(long);
     
     const payload = { lat, long };
-
+    console.log(axiosInstance.defaults.baseURL)
     const { data } = await axiosInstance.post<SolveTspResponse>(
       "/api/solve",
       payload
