@@ -43,7 +43,7 @@ export default function RouteMap({ airports }: RouteMapProps) {
     >
       {airports.map(({ name, lat, long }, idx) => (
         <Marker
-          key={name}
+          key={idx}
           position={{ lat, lng: long }}
           title={name}
           icon={{

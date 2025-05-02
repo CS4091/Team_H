@@ -11,6 +11,7 @@ interface RouteCardProps {
   aircraftName: string;
   totalKilometers: number;
   currentNode: number;
+  id: number;
 }
 
 export default function RouteCard({
@@ -19,7 +20,8 @@ export default function RouteCard({
   date,
   aircraftName,
   totalKilometers,
-  currentNode
+  currentNode,
+  id,
 }: RouteCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -39,10 +41,12 @@ export default function RouteCard({
   };
 //55, 132, 240, 0.5
   return (
-    <a href=''>
+    <a 
+        href={`/auth/route-display/${id}`}
+    >
         <motion.div
         ref={cardRef}
-        className=" w-[400px] rounded-lg shadow-[5px_8px_10px_1px_rgba(55,132,240,0.25)]
+        className=" w-[400px] rounded-lg shadow-[5px_8px_10px_1px_rgba(113,27,76,0.25)]
  bg-white overflow-hidden"
         style={{ 
             perspective: 800,
@@ -54,7 +58,7 @@ export default function RouteCard({
         whileHover={{ scale: 1.03 }}
         transition={{ type: 'spring', stiffness: 200, damping: 20 }}
         >
-        <div className='flex flex-col h-full'>
+        <div className='flex flex-col h-[360px]'>
             <div className='p-4 flex justify-between'>
             <div>
                 <h6 className='font-bold'>{name}</h6>

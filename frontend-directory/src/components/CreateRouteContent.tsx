@@ -12,6 +12,8 @@ import { airportType } from '@/types';
 import { allAirports} from '@/constants/airports';
 import { useJsApiLoader } from '@react-google-maps/api';
 import { solveTsp } from '@/api/solveTsp';
+//import { genRouteThumbnail } from '@/api/genRouteThumbnail';
+import { genRouteThumbnail } from '@/api/genRouteThumbnail';
 
 const selectedAirports: airportType[] = [
     { name: "Camp Bastion Air Base",            icao: "OAZI", lat: 31.8638, long: 64.2246 },
@@ -50,68 +52,68 @@ export default function CreateRouteContent() {
     const [loading, setLoading] = useState<boolean>(false);
     
 
-    const handleGenerateRoute = () => {
+    const handleGenerateRoute = async () => {
         setLoading(true);
-        // first call algorothm endpoint to get list of solved 
-        // once solved and rerreturned, set the path order
-        const solve = async() => {
-            try {
-                // Pass your route name and the full airportType[] array
-                const result = await solveTsp(name, airports);
-          
-                // The backend returns:
-                // {
-                //   image_data: string,
-                //   json_data: {
-                //     tour: number[],
-                //     cost: number,
-                //     tour_length: number,
-                //     is_cycle: boolean
-                //   }
-                // }
-                const { image_data, json_data } = result;
-                setTour(json_data.tour);
-                setTotal_km(json_data.cost);
-                console.log('Total cost:', json_data.cost);
-            }
-            catch (error) {
-                console.log(error);
-            }
+      
+        try {
+          // 1) Solve TSP
+		  console.log(airports);
+          const result = await solveTsp(name, airports);
+          const { json_data } = result;
+          const tourResult = json_data.tour;
+          const costResult = json_data.cost;
+      
+          // 2) Update local UI state
+          setTour(tourResult);
+          setTotal_km(costResult);
+		
+          // 3) generateThumbnail
+		//   console.log('generating thumbnail...')
+        //   const url = await genRouteThumbnail(airports);
+      
+          const thumbnailUrl = await genRouteThumbnail(airports.map(a => a.lat), airports.map(a => a.long));
+
+          // 3) Insert into Supabase using the solver’s output
+          const { data, error } = await supabase
+            .from('routes')
+            .insert([{
+              name,
+              total_km: Math.floor(costResult),
+              km_covered: 0,
+              current_step: 0,
+              tour: tourResult,
+              airport_codes: airports.map(a => a.icao),
+              airport_names: airports.map(a => a.name),
+              lat:             airports.map(a => a.lat),
+              long:            airports.map(a => a.long),
+              thumbnail_url: thumbnailUrl,
+			  aircraft: 'Boeing 747-8'
+			}])
+            .select()
+            .single();
+			console.log(data);
+          if (error) {
+            console.error('Insert failed:', error);
+			setLoading(false);
+            throw error;
+          }
+		  
+          // 4) Navigate on success
+          router.push(`/auth/route-display/${data.id}`);
+        } catch (err) {
+          console.error('Error in route generation flow:', err);
+        } finally {
+          setLoading(false);
         }
-
-
-        const generateRoute = async () => {
-            const { data, error} = await supabase
-                .from('routes')
-                .insert([{
-                    name: name,
-                    total_km: total_km,
-                    km_covered: 0,
-                    current_node: 0,
-                    tour: tour,
-                    airport_codes: airports.map(a => a.icao),
-                    lat: airports.map(a => a.lat),
-                    long:  airports.map(a => a.long),
-                }])
-                .select()
-                .single();
-            
-                if (error) {
-                    console.log(error);
-                } 
-        }
-
-        generateRoute();
-        router.push('/auth/dashboard');
-        setLoading(false);
-    }
+      };
+      
 
     if (loadError) return <p>Error loading Google Maps</p>;
 
     return (
         <div className='relative h-full'>
-            <div className='absolute h-full z-10 pl-[50px] py-[50px]'>
-            <RouteOptions onClick={handleGenerateRoute} isLoaded={isLoaded}/> 
+            <div className='absolute h-full z-10 pl-[70px] py-[50px]'>
+            <RouteOptions onClick={handleGenerateRoute} isLoaded={isLoaded} loading={loading}/> 
             </div>
             {/* <div className='absolute h-fill justify-end z-10 px-[200px] '>
                 <ChipBar/>
