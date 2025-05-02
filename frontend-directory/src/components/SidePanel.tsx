@@ -1,3 +1,4 @@
+
 import HomeIcon from '@/components/icons/HomeIcon';
 import { IoHomeOutline, IoAddCircleOutline } from 'react-icons/io5';
 import { FaChartBar } from 'react-icons/fa';
@@ -8,6 +9,11 @@ interface SidePanelProps {
 }
 
 export default function SidePanel({ currentPage }: SidePanelProps) {
+
+  const handleLogout = () => {
+    //router.push('/');
+  }
+
   return (
     <nav className="h-full w-64 bg-[#f7f7fc] shadow-xl rounded-tr-3xl rounded-br-3xl
                     flex flex-col justify-between items-center
@@ -70,9 +76,14 @@ export default function SidePanel({ currentPage }: SidePanelProps) {
         </div>
         <button
           className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 w-full justify-center"
+            onClick={handleLogout}
         >
           <FiLogOut className="w-5 h-5 text-gray-700" />
-          <span className="text-gray-800 font-medium">Logout</span>
+          <span 
+            className="text-gray-800 font-medium"
+          >
+            Logout
+          </span>
         </button>
       </div>
     </nav>
