@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useEffect, useContext } from 'react';
-import RouteOptions from '@/components/RouteOptions';
-import ChipBar from '@/components/ChipBar';
-import dynamic from "next/dynamic";
+import { RouteOptions } from '@/components';
+//import dynamic from "next/dynamic";
 import RouteMap from '@/components/RouteMap';
 import { RouteContext } from '@/contexts/RouteOptionsContext';
 import { useRouter } from 'next/navigation';
@@ -12,26 +11,7 @@ import { airportType } from '@/types';
 import { allAirports} from '@/constants/airports';
 import { useJsApiLoader } from '@react-google-maps/api';
 import { solveTsp } from '@/api/solveTsp';
-//import { genRouteThumbnail } from '@/api/genRouteThumbnail';
 import { genRouteThumbnail } from '@/api/genRouteThumbnail';
-
-const selectedAirports: airportType[] = [
-    { name: "Camp Bastion Air Base",            icao: "OAZI", lat: 31.8638, long: 64.2246 },
-    { name: "Herat International Airport",      icao: "OAHR", lat: 34.21,   long: 62.2283 },
-    { name: "Shindand Air Base",                icao: "OASD", lat: 33.3913, long: 62.2610 },
-    { name: "Zaranj Airport",                   icao: "OAZJ", lat: 30.9722, long: 61.8658 },
-    { name: "Gardez Airport",                   icao: "OAGZ", lat: 33.6315, long: 69.2394 },
-    { name: "Kabul International Airport",      icao: "OAKB", lat: 34.5658, long: 69.2131 },
-    { name: "Kandahar International Airport",   icao: "OAKN", lat: 31.5058, long: 65.8478 },
-    { name: "Tarinkot Airport",                 icao: "OATN", lat: 32.6042, long: 65.8658 },
-    { name: "Uruzgan Airport",                  icao: "OARG", lat: 32.9030, long: 66.6309 },
-    { name: "Khost Airfield",                   icao: "OAKS", lat: 33.3334, long: 69.9520 },
-    { name: "Forward Operating Base Salerno",   icao: "OASL", lat: 33.3638, long: 69.9561 },
-    { name: "Kunduz Airport",                   icao: "OAUZ", lat: 36.6651, long: 68.9108 },
-    { name: "Forward Operating Base Shank",     icao: "OASH", lat: 33.9225, long: 69.0772 },
-    { name: "Jalalabad Airport",                icao: "OAJL", lat: 34.3998, long: 70.4986 },
-];
-  
 
 export default function CreateRouteContent() {
     const { isLoaded, loadError } = useJsApiLoader({

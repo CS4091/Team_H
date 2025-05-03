@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { tspClient } from '../api/tspClient';
+//import { tspClient } from '../api/tspClient';
 
 interface FileUploadProps {
   onSolveComplete?: (result: any) => void;
@@ -31,9 +31,9 @@ export default function FileUpload({ onSolveComplete }: FileUploadProps) {
     setError(null);
     
     try {
-      const result = await tspClient.uploadProblem(file);
+      //const result = await tspClient.uploadProblem(file);
       if (onSolveComplete) {
-        onSolveComplete(result);
+        //onSolveComplete(result);
       }
     } catch (err) {
       setError('Failed to solve the TSP problem. Please try again.');
