@@ -6,6 +6,7 @@ import Button from '@/components/Button';
 import { useRouter } from 'next/navigation';
 import supabase from '@/api/supabaseClient';
 import { motion } from 'framer-motion';
+import { SyncLoader } from 'react-spinners';
 
 export default function SignInPage() {
   const router = useRouter();
@@ -70,24 +71,19 @@ export default function SignInPage() {
           sx={{ '& .MuiOutlinedInput-root': { borderRadius: '8px' } }}
         />
 
-        {/* Animated button */}
-        <motion.div
-          animate={loading ? { scale: [1, 1.05, 1] } : { scale: 1 }}
-          transition={
-            loading
-              ? { repeat: Infinity, duration: 0.8, ease: 'easeInOut' }
-              : {}
-          }
-        >
-          <Button
-            text={loading ? 'Logging in…' : 'Login'}
-            onClick={handleLogin}
-            fillContainer={true}
-            invert={false}
-            // optionally disable clicks while loading
-            {...(loading && { onClick: () => {} })}
-          />
-        </motion.div>
+        {/* Loader or Button */}
+        <div className="flex justify-center items-center h-[50px]">
+          {loading ? (
+            <SyncLoader color="#000000" size={10} />
+          ) : (
+            <Button
+              text="Login"
+              onClick={handleLogin}
+              fillContainer={true}
+              invert={false}
+            />
+          )}
+        </div>
       </motion.div>
     </motion.div>
   );
