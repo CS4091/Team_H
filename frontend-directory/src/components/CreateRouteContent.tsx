@@ -48,9 +48,6 @@ export default function CreateRouteContent() {
       setTotal_km(costResult);
 
       // 3) generateThumbnail
-      //   console.log('generating thumbnail...')
-      //   const url = await genRouteThumbnail(airports);
-
       const thumbnailCoords: [number, number][] = [];
       for (const num of tourResult) {
         thumbnailCoords.push([airports[num].lat, airports[num].long]);
