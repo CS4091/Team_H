@@ -1,129 +1,173 @@
-import Image from "next/image"
+'use client';
 
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
-export default function Home() {
+import Image from "next/image";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+
+import { motion, Variants } from 'framer-motion';
+
+const sectionVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { when: 'beforeChildren', staggerChildren: 0.2, duration: 0.6 }
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 120, damping: 20 } },
+};
+
+const Features = () => null; // placeholder
+
+const teamMembers = [
+  { name: "Vishaanth Muddu", linkedin: "https://www.linkedin.com/in/vishaanth-muddu/", img: "/vishaanth.jpg" },
+  { name: "Maanav Damaraju", linkedin: "https://www.linkedin.com/in/maanavdamaraju/", img: "/maanav.jpg" },
+  { name: "Logan Markley", linkedin: "https://www.linkedin.com/in/logan-c-markley/", img: "/logan.jpg" },
+  { name: "Matthew Dominicis", linkedin: "https://www.linkedin.com/in/midxm6/", img: "/matthew.jpg" },
+  { name: "Shreyas Mocherla", linkedin: "https://www.linkedin.com/in/aiwithshrey/", img: "/shreyas.jpg" },
+  { name: "Ayman Awsaf Rahman", linkedin: "https://www.linkedin.com/in/ayman-awsaf-rahman/", img: "/ayman.jpg" },
+];
+
+export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="bg-white pb-[50px]">
       {/* Stats Section */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Routes Generated */}
-            <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-sm font-medium uppercase text-gray-700">ROUTES GENERATED</h3>
-              <p className="text-5xl font-bold mt-2">1,592</p>
-              <p className="text-gray-500 mt-2">3.6 hours | 683 miles</p>
-            </div>
-
-            {/* Money Saved */}
-            <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-sm font-medium uppercase text-gray-700">MONEY SAVED</h3>
-              <p className="text-5xl font-bold mt-2">$2953</p>
-              <p className="text-gray-500 mt-2">3.6 hours | 683 miles</p>
-            </div>
-
-            {/* Users Helped */}
-            <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="text-sm font-medium uppercase text-gray-700">USERS HELPED</h3>
-              <p className="text-5xl font-bold mt-2">163</p>
-              <p className="text-gray-500 mt-2">3.6 hours | 643</p>
-            </div>
-          </div>
+      <motion.section
+        className="py-12"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={sectionVariants}
+      >
+        <div className="max-w-5xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          {[
+            { title: "ROUTES GENERATED", value: "1,592", detail: "3.6 hours | 683 miles" },
+            { title: "MONEY SAVED", value: "$2,953", detail: "3.6 hours | 683 miles" },
+            { title: "USERS HELPED", value: "163", detail: "3.6 hours | 643 miles" },
+          ].map((stat, i) => (
+            <motion.div key={i} variants={itemVariants}>
+              <StatCard {...stat} />
+            </motion.div>
+          ))}
         </div>
-      </section>
+      </motion.section>
 
-      {/* Who Are We Section */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row gap-8 items-start">
-            <div className="bg-gray-200 p-6 rounded-lg w-full md:w-64 h-32 flex items-center justify-center">
-              <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-gray-400 rounded-t-full transform rotate-180"></div>
-                <div className="w-16 h-16 flex mt-2">
-                  <div className="w-8 h-8 bg-gray-400"></div>
-                  <div className="w-8 h-8 bg-gray-400 rounded-full"></div>
-                </div>
-              </div>
-            </div>
-            <div className="flex-1">
-              <h2 className="text-2xl font-bold">Who Are We?</h2>
-              <p className="text-gray-500 mt-1">subtitle</p>
-              <p className="mt-4 text-gray-700">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat.
-              </p>
-              <p className="mt-4 text-gray-700">
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-                laborum.
-              </p>
-            </div>
-          </div>
+      {/* Who We Are */}
+      <motion.section
+        className="py-12 bg-gray-50"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={sectionVariants}
+      >
+        <div className="max-w-4xl mx-auto px-4 space-y-6">
+          <h2 className="text-3xl font-bold text-gray-900">Who Are We?</h2>
+          <motion.p variants={itemVariants} className="text-gray-700 leading-relaxed">
+            We’re the <strong>Pink Pony Club</strong>: a team of six senior Computer Science
+            students at Missouri S&T: Vishaanth Muddu, Maanav Damaraju, Logan Markley,
+            Matthew Dominicis, Shreyas Mocherla, and Ayman Awsaf Rahman.
+          </motion.p>
+          <motion.p variants={itemVariants} className="text-gray-700 leading-relaxed">
+            For our Capstone II project, we’re partnering with <strong>Boeing</strong> to solve a
+            real-world variant of the <strong>Traveling Salesman Problem (TSP)</strong>. Our
+            challenge is to generate optimal aircraft routing solutions using data-driven heuristics
+            and automation.
+          </motion.p>
+          <motion.p variants={itemVariants} className="text-gray-700 leading-relaxed">
+            Our team brings together strengths in algorithm design, backend development, user
+            interface design, and systems thinking to deliver a robust, high-performance routing
+            platform tailored to Boeing’s operational needs.
+          </motion.p>
         </div>
-      </section>
+      </motion.section>
 
-      {/* What Do We Do Section */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row-reverse gap-8 items-start">
-            <div className="bg-gray-200 p-6 rounded-lg w-full md:w-64 h-32 flex items-center justify-center">
-              <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-gray-400 rounded-t-full transform rotate-180"></div>
-                <div className="w-16 h-16 flex mt-2">
-                  <div className="w-8 h-8 bg-gray-400"></div>
-                  <div className="w-8 h-8 bg-gray-400 rounded-full"></div>
-                </div>
-              </div>
-            </div>
-            <div className="flex-1">
-              <h2 className="text-2xl font-bold">What Do We Do?</h2>
-              <p className="text-gray-500 mt-1">subtitle</p>
-              <p className="mt-4 text-gray-700">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat.
-              </p>
-              <p className="mt-4 text-gray-700">
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-                laborum.
-              </p>
-            </div>
-          </div>
+      {/* How We Built This */}
+      <motion.section
+        className="py-12"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={sectionVariants}
+      >
+        <div className="max-w-4xl mx-auto px-4 space-y-6">
+          <h2 className="text-3xl font-bold text-gray-900">How We Built This</h2>
+          <motion.p variants={itemVariants} className="text-gray-700 leading-relaxed">
+            Our frontend is built with <strong>React</strong>, <strong>TypeScript</strong>,
+            <strong>Next.js</strong>, and <strong>Tailwind CSS</strong>, ensuring a modern,
+            fast, and responsive interface for visualizing routing results.
+          </motion.p>
+          <motion.p variants={itemVariants} className="text-gray-700 leading-relaxed">
+            On the backend, we use shell scripting and <strong>PlantUML</strong> to automate the
+            generation of route diagrams based on TSP outputs. We implemented custom heuristics
+            and optimization logic to tackle real-world constraints and produce high-quality,
+            repeatable results.
+          </motion.p>
         </div>
-      </section>
+      </motion.section>
 
-      {/* How Do We Do It Section */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row gap-8 items-start">
-            <div className="bg-gray-200 p-6 rounded-lg w-full md:w-64 h-32 flex items-center justify-center">
-              <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-gray-400 rounded-t-full transform rotate-180"></div>
-                <div className="w-16 h-16 flex mt-2">
-                  <div className="w-8 h-8 bg-gray-400"></div>
-                  <div className="w-8 h-8 bg-gray-400 rounded-full"></div>
-                </div>
-              </div>
-            </div>
-            <div className="flex-1">
-              <h2 className="text-2xl font-bold">How Do We Do It?</h2>
-              <p className="text-gray-500 mt-1">subtitle</p>
-              <p className="mt-4 text-gray-700">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat.
-              </p>
-              <p className="mt-4 text-gray-700">
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-                laborum.
-              </p>
-            </div>
-          </div>
+      {/* Meet the Team */}
+      <motion.section
+        className="py-12 bg-gray-100"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={sectionVariants}
+      >
+        <div className="max-w-5xl mx-auto px-4">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8">Meet the Team</h2>
+          <Swiper
+            modules={[Navigation, Pagination]}
+            navigation
+            pagination={{ clickable: true }}
+            spaceBetween={24}
+            slidesPerView={1}
+            breakpoints={{
+              640: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+            }}
+          >
+            {teamMembers.map((member, idx) => (
+              <SwiperSlide key={idx}>
+                <motion.a
+                  href={member.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center"
+                  variants={itemVariants}
+                >
+                  <Image
+                    src={member.img}
+                    alt={member.name}
+                    width={100}
+                    height={100}
+                    className="rounded-full mb-4"
+                  />
+                  <h4 className="text-lg font-semibold text-gray-900">
+                    {member.name}
+                  </h4>
+                </motion.a>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
-      </section>
+      </motion.section>
     </div>
-  )
+  );
+}
+
+function StatCard({ title, value, detail }: { title: string; value: string; detail: string }) {
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg p-6 text-center">
+      <h5 className="text-sm font-medium uppercase text-gray-600">{title}</h5>
+      <p className="text-4xl font-bold text-gray-900 my-2">{value}</p>
+      <p className="text-gray-500">{detail}</p>
+    </div>
+  );
 }
