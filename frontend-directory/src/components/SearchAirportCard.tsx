@@ -92,13 +92,13 @@ export default function SearchAirportCard({
           "
         />
 
-        <div className="max-h-60 overflow-y-auto bg-white border border-gray-200 rounded">
-          {filteredAirports.length === 0 ? (
-            <p className="p-2 text-gray-500">
-              {searchTerm ? "No matching airports found" : "Enter an ICAO code"}
-            </p>
-          ) : (
-            filteredAirports.map((airport) => {
+        {filteredAirports.length === 0 && searchTerm && (
+          <p className="p-2 text-gray-500 bg-white border border-gray-200 rounded">No matching airports found</p>
+        )}
+          
+        {filteredAirports.length > 0 && 
+          <div className="max-h-60 overflow-y-auto bg-white border border-gray-200 rounded">
+            {filteredAirports.map((airport) => {
               // Ensure we have a valid, non-empty key
               const itemKey = airport.icao || `airport-${airport.name}-${airport.lat}-${airport.long}`;
               return (
@@ -115,9 +115,9 @@ export default function SearchAirportCard({
                   <span className="text-gray-600">{airport.name}</span>
                 </div>
               );
-            })
-          )}
+            })}
         </div>
+          }
 
         {selectedAirport && (
           <div className="mt-4 p-2 bg-gray-100 rounded border border-gray-200">
