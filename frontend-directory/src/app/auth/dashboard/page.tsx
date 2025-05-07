@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import RouteCard from '@/components/RouteCard';
 import { formatDate } from '@/utils';
 import supabase from '@/api/supabaseClient';
+import { useAuth } from '@/contexts/UserContextProvider';
 
 const containerVariants = {
     hidden: {}, // we don’t need to animate the container itself
@@ -24,24 +25,28 @@ show:   { opacity: 1, y: 0 }
 export default function DashboardPage() {
     const [routes, setRoutes] = useState<any | null>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const { user, loading: authLoading } = useAuth();
 
     useEffect(() => {
-        //setRoutes(dummyData);
+        if (authLoading || !user) return;
         const fetchRoutes = async () => {
             setLoading(true);
             const { data, error } = await supabase
                 .from('routes')
                 .select('*')
+                .eq('user_id', user.id)
                 .order('created_at', { ascending: false });
             if (error) {
+                console.log(error)
                 console.error(error);
             } else {
+                console.log(data);
                 setRoutes(data);
                 setLoading(false);
             }
         };
         fetchRoutes();
-    }, []);
+    }, [user, authLoading]);
 
     // h-fill is very important
     return (

@@ -51,11 +51,22 @@ export default function RouteDisplayPage() {
                 console.error(error);
                 setLoading(false);
             } else {
+                console.log(data.aircraft_id);
+                const { data: aircraftData, error: aircraftError } = await supabase
+                    .from('aircrafts')
+                    .select('name')
+                    .eq('id', data.aircraft_id)
+                    .single();
+                if (aircraftError) {
+                    setAircraft('Boeing 747-8');
+                    console.log('failed to get aircraft')
+                } else {
+                    setAircraft(aircraftData.name);
+                }
                 setTour(data.tour);
                 setName(data.name);
                 setTotal_km(data.total_km);
                 setKm_covered(data.setKm_covered);
-                setAircraft(data.aircraft);
                 setCurrentStep(data.current_step);
                 const zippedUpAirports: airportType[] = zipAirportData(
                     data.airport_names, 
