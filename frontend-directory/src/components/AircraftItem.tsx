@@ -25,7 +25,7 @@ export default function AircraftItem({
   };
 
   return (
-    <div className="outline flex flex-row items-center justify-between gap-[300px] w-full bg-black/5 hover:bg-black/10 transition-colors rounded-lg p-4 cursor-pointer group">
+    <div className="shadow-lg flex flex-row items-center justify-between gap-[300px] w-full bg-black/5 hover:bg-black/10 transition-colors rounded-lg p-4 cursor-pointer group">
       <div className="flex items-center flex-1">
         <h3 className="text-black font-light text-lg">{name}</h3>
       </div>

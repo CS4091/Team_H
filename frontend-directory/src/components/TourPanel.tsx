@@ -61,11 +61,11 @@ export default function TourPanel({
             className={`
               relative flex flex-col items-center justify-center w-[160px] h-[100px]
               rounded-xl shadow-md text-s text-center 
-              ${index === currentStep ? 'bg-[#ffecf2] font-semibold' : 'bg-blue-50'}
+              ${index === currentStep ? 'bg-[#711b4c]' : `${index < currentStep ? 'bg-[#f198c6]': 'bg-white'}`}
             `}
           >
-            <h6>{airports[node].icao}</h6>
-            <p className="text-gray-400 italic">{airports[node].name}</p>
+            <h5 className={`${index === currentStep ? 'text-white' : ''}`}>{airports[node].icao}</h5>
+            <p className={`text-gray-700 italic ${index === currentStep ? 'text-white' : ''}`}>{airports[node].name}</p>
           </button>
         ))}
 
@@ -100,7 +100,7 @@ export default function TourPanel({
               className={`w-6 h-3 rounded-full mx-1
                 ${
                   index < currentStep
-                    ? 'bg-gray-400'
+                    ? 'bg-[#f198c6]'
                     : index === currentStep
                     ? 'bg-[#711b4c]'
                     : 'bg-gray-200'
@@ -109,7 +109,7 @@ export default function TourPanel({
             {index < tour.length - 1 && (
               <span
                 className={`w-[270px] h-1 mx-1
-                  ${index < currentStep ? 'bg-gray-400' : 'bg-gray-200'}`}
+                  ${index < currentStep ? 'bg-[#f9cbd9]' : 'bg-gray-200'}`}
               />
             )}
           </React.Fragment>
