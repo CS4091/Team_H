@@ -72,8 +72,7 @@ export default function SignInPage() {
         />
 
         {/* Loader or Button */}
-        <div className="flex justify-center items-center h-screen">
-          <div className="my-4">
+        <div className="flex justify-center">
           {loading ? (
             <SyncLoader color="#000000" size={20} />
           ) : (
@@ -85,7 +84,6 @@ export default function SignInPage() {
             />
           )}
           </div>
-        </div>
       </motion.div>
     </motion.div>
   );
