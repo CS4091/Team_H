@@ -100,9 +100,9 @@ export default function RouteDisplayPage() {
     return (
         <div className='relative h-full'>
             {loading ? (
-                <div className="flex justify-center items-center h-full">
-                    <SyncLoader color="#000000" /> 
-                </div>
+                <div className="flex justify-center items-center h-screen">
+                    <SyncLoader color="#000000" size = {20}/>
+                                    </div>
             ) : (
                 <>
                     <div className='absolute flex flex-col justify-between gap-[200px] w-full h-full z-10 px-[50px] py-[50px] pointer-events-none'>

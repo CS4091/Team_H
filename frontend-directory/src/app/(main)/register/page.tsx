@@ -46,8 +46,10 @@ export default function SignInPage() {
 
       {/* Loader */}
       {loading && (
-        <div className="my-4">
-          <SyncLoader color="#000000" size={10} />
+        <div className="flex justify-center items-center h-screen">
+          <div className="my-4">
+            <SyncLoader color="#000000" size={20} />
+          </div>
         </div>
       )}
 

@@ -74,13 +74,14 @@ export default function DashboardPage() {
                 </motion.div>
                 </div>
             ) : (
-                <motion.div 
-					className='flex flex-col justify-center items-center pt-[200px]'
-					variants={cardVariants}
-				>
-					{/* ✅ New loader */}
-                    <SyncLoader color="#000000" />
-                </motion.div>
+        <motion.div 
+            className="flex justify-center items-center h-screen"
+            variants={cardVariants}
+        >
+            <div className="my-4">
+                <SyncLoader color="#000000" size={20} />
+            </div>
+        </motion.div>                  
             )}
         </>
       );    
