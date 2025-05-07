@@ -33,7 +33,10 @@ export default function DashboardPage() {
             setLoading(true);
             const { data, error } = await supabase
                 .from('routes')
-                .select('*')
+                .select(`
+                    *,
+                    aircrafts ( name )
+                `)
                 .eq('user_id', user.id)
                 .order('created_at', { ascending: false });
             if (error) {
@@ -68,7 +71,8 @@ export default function DashboardPage() {
                             <RouteCard
                                 name={route.name}
                                 thumbnail={route.thumbnail_url}
-                                aircraftName={route.aircraft}
+                                aircraftName={route.aircrafts ? 
+                                    route.aircrafts.name : 'Boeing 737'}
                                 date={formatDate(route.created_at)}
                                 totalKilometers={route.total_km}
                                 currentNode={route.current_node}

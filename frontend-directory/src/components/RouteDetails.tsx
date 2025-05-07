@@ -3,11 +3,14 @@
 import { Route } from "next";
 import { IoAirplaneOutline } from "react-icons/io5";
 import { MdModeOfTravel } from "react-icons/md";
+import { FiDollarSign } from "react-icons/fi";
+
 
 interface RouteDetailsProps {
     name: string;
     totalKm: number;
     kmCovered: number;
+    totalCost: number;
     aircraft: string;
 };
 
@@ -15,6 +18,7 @@ export default function RouteDetails({
     name,
     totalKm,
     kmCovered,
+    totalCost,
     aircraft,
 }: RouteDetailsProps) {
     return (
@@ -35,6 +39,10 @@ export default function RouteDetails({
                 <div className='flex gap-[10px] items-center'>
                     <MdModeOfTravel size={24} />
                     <p className='text-sm font-light'>{`${totalKm} km`}</p>
+                </div>
+                <div className='flex gap-[10px] items-center'>
+                    <FiDollarSign size={24} />
+                    <p className='text-sm font-light'>{`${totalCost}`}</p>
                 </div>
             </div>
         </div>

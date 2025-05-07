@@ -7,6 +7,7 @@ import TourPanel from '@/components/TourPanel';
 import { zipAirportData } from '@/utils';
 import { useJsApiLoader } from "@react-google-maps/api";
 import { useParams } from "next/navigation";
+import { calcCost } from '@/utils';
 import supabase from '@/api/supabaseClient';
 
 import { airportType } from '@/types';
@@ -31,6 +32,8 @@ export default function RouteDisplayPage() {
     const [total_km, setTotal_km] = useState<number>(0);
     const [km_covered, setKm_covered] = useState<number>(0);
     const [aircraft, setAircraft] = useState<string>('');
+    const [burnRate, setBurnRate] = useState<number>(0);
+    const [speed, setSpeed] = useState<number>(0);
     const [currentStep, setCurrentStep] = useState<number>(0);
     // const [airportCodes, setAirportCodes] = useState<string[]>([]);
     // const [lattitudes, setLattitudes] = useState<number[]>([]);
@@ -54,14 +57,18 @@ export default function RouteDisplayPage() {
                 console.log(data.aircraft_id);
                 const { data: aircraftData, error: aircraftError } = await supabase
                     .from('aircrafts')
-                    .select('name')
+                    .select('name, burn_rate, speed')
                     .eq('id', data.aircraft_id)
                     .single();
                 if (aircraftError) {
                     setAircraft('Boeing 747-8');
+                    setBurnRate(0);
+                    setSpeed(0);
                     console.log('failed to get aircraft')
                 } else {
                     setAircraft(aircraftData.name);
+                    setBurnRate(aircraftData.burn_rate);
+                    setSpeed(aircraftData.speed);
                 }
                 setTour(data.tour);
                 setName(data.name);
@@ -127,6 +134,7 @@ export default function RouteDisplayPage() {
                         name={name}
                         totalKm={total_km}
                         kmCovered={km_covered}
+                        totalCost={calcCost(burnRate, total_km, speed)}
                         aircraft={aircraft}
                     />
                     <div className='flex flex-row gap-[30px] justify-center items-center pointer-events-auto'>
