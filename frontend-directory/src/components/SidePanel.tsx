@@ -2,6 +2,7 @@ import HomeIcon from '@/components/icons/HomeIcon';
 import { IoHomeOutline, IoAddCircleOutline } from 'react-icons/io5';
 import { FaChartBar } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
+import { LuPlane } from "react-icons/lu";
 
 interface SidePanelProps {
   currentPage: string | null;
@@ -43,7 +44,17 @@ export default function SidePanel({ currentPage }: SidePanelProps) {
           <IoAddCircleOutline className="w-6 h-6 text-gray-700" />
           <span className="text-gray-800 font-medium">New Route</span>
         </a>
-
+          
+        <a
+          href="/auth/aircrafts"
+          className={`
+            flex items-center gap-3 px-4 py-2 rounded-lg
+            ${currentPage === 'aircrafts' ? 'bg-gray-200' : 'hover:bg-gray-100'}
+          `}
+        >
+          <LuPlane className="w-6 h-6 text-gray-700" />
+          <span className="text-gray-800 font-medium">Aircrafts</span>
+        </a>
         <a
           href="/auth/route-generator"
           className={`
