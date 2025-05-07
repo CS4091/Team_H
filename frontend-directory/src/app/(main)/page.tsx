@@ -42,7 +42,7 @@ export default function Home() {
 
 	return (
         <div>
-			<div className='flex h-screen justify-center items-center px-[100px] gap-[100px]'>
+			<div className='flex h-screen justify-center items-center px-[100px] gap-[100px] mt-[-78px]'>
 				<div className='flex flex-row gap-[70px] w-full'> 
 					<motion.div 
 						className='flex flex-col justify-center gap-[30px]'

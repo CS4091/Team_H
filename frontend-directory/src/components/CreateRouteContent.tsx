@@ -14,9 +14,9 @@ import { solveTsp } from '@/api/solveTsp';
 import { genRouteThumbnail } from '@/api/genRouteThumbnail';
 
 export default function CreateRouteContent() {
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
-        libraries: ['places'],               // for autocomplete
+    const { isLoaded, loadError } = useJsApiLoader({
+        googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
+        libraries: ['places', 'geometry'],               // for autocomplete
         mapIds: ['ce7c5f352b0bc4fa'],        // for map styling
   });
 

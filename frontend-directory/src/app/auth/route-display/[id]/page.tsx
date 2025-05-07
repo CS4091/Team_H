@@ -40,8 +40,8 @@ export default function RouteDisplayPage() {
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        setLoading(true);
         const fetchRoute = async () => {
+            setLoading(true);
             const { data, error } = await supabase
                 .from('routes')
                 .select('*')
@@ -64,10 +64,10 @@ export default function RouteDisplayPage() {
                     data.long
                 );
                 setAirports(zippedUpAirports);
+                setLoading(false);
             }
         };
         fetchRoute();
-        setLoading(false);
     }, [])
 
     const mapRef = useRef<google.maps.Map | null>(null);
@@ -148,7 +148,7 @@ export default function RouteDisplayPage() {
                     </div>
                 </div>
             )}
-            {isLoaded && 
+            {isLoaded && !loading &&
                 <SolvedMap 
                     airports={airports}
                     tour={tour}
